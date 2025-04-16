@@ -1,96 +1,130 @@
 use std::{
-    collections::hash_map::DefaultHasher, error::Error, hash::{Hash, Hasher}, time::Duration
+    collections::hash_map::DefaultHasher,
+    error::Error,
+    hash::{Hash, Hasher},
+    time::Duration,
 };
-
 use futures::stream::StreamExt;
 use libp2p::{
     gossipsub, mdns, noise,
-    swarm::{NetworkBehaviour, SwarmEvent},
-    tcp, yamux, PeerId,
+    swarm::{NetworkBehaviour, SwarmBuilder, SwarmEvent},
+    tcp, yamux, PeerId, Transport,
 };
 use tokio::{io, io::AsyncBufReadExt, select};
 use tracing_subscriber::EnvFilter;
 
-// We create a custom network behaviour that combines Gossipsub and Mdns.
+use crate::adkg_layer::{ADKGMessage, ADKGNode};
+
 #[derive(NetworkBehaviour)]
-struct MyBehaviour {
-    gossipsub: gossipsub::Behaviour,
+#[behaviour(out_event = "MyBehaviourEvent")]
+pub struct MyBehaviour {
+    pub gossipsub: gossipsub::Behaviour,
     mdns: mdns::tokio::Behaviour,
 }
 
-pub async fn run() -> Result<(), Box<dyn Error>> {
-    
-    let _ = tracing_subscriber::fmt()
-    .with_env_filter(EnvFilter::from_default_env())
-    .try_init();
+#[derive(Debug)]
+pub enum MyBehaviourEvent {
+    Gossipsub(gossipsub::Event),
+    Mdns(mdns::Event),
+}
 
-    let mut swarm = libp2p::SwarmBuilder::with_new_identity()
-        .with_tokio()
-        .with_tcp(
-            tcp::Config::default(),
-            noise::Config::new,
-            yamux::Config::default,
-        )?
-        .with_quic()
-        .with_behaviour(|key| {
-            // To content-address message, we can take the hash of message and use it as an ID.
-            let message_id_fn = |message: &gossipsub::Message| {
-                let mut s = DefaultHasher::new();
-                message.data.hash(&mut s);
-                gossipsub::MessageId::from(s.finish().to_string())
-            };
+impl From<gossipsub::Event> for MyBehaviourEvent {
+    fn from(event: gossipsub::Event) -> Self {
+        MyBehaviourEvent::Gossipsub(event)
+    }
+}
 
-            // Set a custom gossipsub configuration
-            let gossipsub_config = gossipsub::ConfigBuilder::default()
-                .heartbeat_interval(Duration::from_secs(30)) // This is set to aid debugging by not cluttering the log space
-                .validation_mode(gossipsub::ValidationMode::Strict) // This sets the kind of message validation. The default is Strict (enforce message
-                // signing)
-                .message_id_fn(message_id_fn) // content-address messages. No two messages of the same content will be propagated.
-                .build()
-                .map_err(io::Error::other)?; // Temporary hack because `build` does not return a proper `std::error::Error`.
+impl From<mdns::Event> for MyBehaviourEvent {
+    fn from(event: mdns::Event) -> Self {
+        MyBehaviourEvent::Mdns(event)
+    }
+}
 
-            // build a gossipsub network behaviour
-            let gossipsub = gossipsub::Behaviour::new(
-                gossipsub::MessageAuthenticity::Signed(key.clone()),
+pub async fn run(n: usize, t: usize, idx: u64) -> Result<(), Box<dyn Error>> {
+    tracing_subscriber::fmt()
+        .with_env_filter(EnvFilter::from_default_env())
+        .try_init()
+        .map_err(|e| Box::new(e) as Box<dyn Error>)?;
+
+    let local_key = libp2p::identity::Keypair::generate_ed25519();
+    let local_peer_id = PeerId::from(local_key.public());
+    let node_id = local_peer_id.to_string();
+
+    // Create TCP transport
+    let tcp_transport = tcp::tokio::Transport::new(tcp::Config::default())
+        .upgrade(libp2p::core::upgrade::Version::V1)
+        .authenticate(noise::Config::new(&local_key)?)
+        .multiplex(yamux::Config::default())
+        .boxed();
+
+    // Create QUIC transport
+    let quic_transport = libp2p::quic::tokio::Transport::new(libp2p::quic::Config::new(&local_key));
+
+    // Combine transports
+    let transport = libp2p::core::transport::OrTransport::new(quic_transport, tcp_transport)
+        .boxed();
+
+    // Create gossipsub configuration
+    let message_id_fn = |message: &gossipsub::Message| {
+        let mut s = DefaultHasher::new();
+        message.data.hash(&mut s);
+        gossipsub::MessageId::from(s.finish().to_string())
+    };
+
+    let gossipsub_config = gossipsub::ConfigBuilder::default()
+        .heartbeat_interval(Duration::from_secs(30))
+        .validation_mode(gossipsub::ValidationMode::Strict)
+        .message_id_fn(message_id_fn)
+        .build()
+        .map_err(|e| Box::new(e) as Box<dyn Error>)?;
+
+    // Create swarm
+    let mut swarm = SwarmBuilder::with_tokio_executor(
+        transport,
+        MyBehaviour {
+            gossipsub: gossipsub::Behaviour::new(
+                gossipsub::MessageAuthenticity::Signed(local_key.clone()),
                 gossipsub_config,
-            )?;
+            )?,
+            mdns: mdns::tokio::Behaviour::new(
+                mdns::Config {
+                    query_interval: Duration::from_secs(10),
+                    ttl: Duration::from_secs(10),
+                    ..Default::default()
+                },
+                local_peer_id,
+            )?,
+        },
+        local_peer_id,
+    )
+    .build();
 
-            let mdns_config = mdns::Config {
-                query_interval: Duration::from_secs(10),
-                ttl: Duration::from_secs(10),
-                ..Default::default()
-            };
-
-            let mdns =
-                mdns::tokio::Behaviour::new(mdns_config, key.public().to_peer_id())?;
-            Ok(MyBehaviour { gossipsub, mdns })
-        })?
-        .build();
-
-    // Create a Gossipsub topic
+    // Subscribe to topics
     let topic = gossipsub::IdentTopic::new("test-net");
-    // subscribes to our topic
     swarm.behaviour_mut().gossipsub.subscribe(&topic)?;
 
-    // Read full lines from stdin
-    let mut stdin = io::BufReader::new(io::stdin()).lines();
+    let adkg_topic = gossipsub::IdentTopic::new("/adkg/1.0.0");
+    swarm.behaviour_mut().gossipsub.subscribe(&adkg_topic)?;
 
-    // Listen on all interfaces and whatever port the OS assigns
+    // Set up listeners
     swarm.listen_on("/ip4/0.0.0.0/udp/0/quic-v1".parse()?)?;
     swarm.listen_on("/ip4/0.0.0.0/tcp/0".parse()?)?;
 
-    println!("Enter messages via STDIN and they will be sent to connected peers using Gossipsub");
-
+    let mut stdin = io::BufReader::new(io::stdin()).lines();
     let mut peer_list: Vec<PeerId> = Vec::new();
+    let mut adkg_node = ADKGNode::new(node_id.clone(), n, t, idx);
+
     println!("Peer ID: {}", swarm.local_peer_id());
-    
-    // Kick it off
+    adkg_node.start_adkg(&mut swarm).await?;
+
     loop {
         select! {
             Ok(Some(line)) = stdin.next_line() => {
                 if let Err(e) = swarm
-                    .behaviour_mut().gossipsub
-                    .publish(topic.clone(), line.as_bytes()) {
+                    .behaviour_mut()
+                    .gossipsub
+                    .publish(topic.clone(), line.as_bytes())
+                {
                     println!("Publish error: {e:?}");
                 }
             }
@@ -99,11 +133,11 @@ pub async fn run() -> Result<(), Box<dyn Error>> {
                     for (peer_id, _multiaddr) in list {
                         println!("mDNS discovered a new peer: {peer_id}");
                         peer_list.retain(|p| p != &peer_id);
-                        peer_list.push(peer_id.clone());
+                        peer_list.push(peer_id);
                         swarm.behaviour_mut().gossipsub.add_explicit_peer(&peer_id);
                         println!("[NEW] Peers: {}", peer_list.len());
                     }
-                },
+                }
                 SwarmEvent::Behaviour(MyBehaviourEvent::Mdns(mdns::Event::Expired(list))) => {
                     for (peer_id, _multiaddr) in list {
                         println!("mDNS discover peer has expired: {peer_id}");
@@ -111,20 +145,115 @@ pub async fn run() -> Result<(), Box<dyn Error>> {
                         swarm.behaviour_mut().gossipsub.remove_explicit_peer(&peer_id);
                         println!("[EXP] Peers: {}", peer_list.len());
                     }
-                },
+                }
                 SwarmEvent::Behaviour(MyBehaviourEvent::Gossipsub(gossipsub::Event::Message {
                     propagation_source: peer_id,
                     message_id: id,
                     message,
-                })) => println!(
-                        "Got message: '{}' with id: {id} from peer: {peer_id}",
-                        String::from_utf8_lossy(&message.data),
-                    ),
+                })) => {
+                    if let Ok(adkg_msg) = serde_json::from_slice::<ADKGMessage>(&message.data) {
+                        adkg_node.handle_message(adkg_msg, &mut swarm).await?;
+                    } else {
+                        println!(
+                            "Got non-ADKG message: '{}' with id: {id} from peer: {peer_id}",
+                            String::from_utf8_lossy(&message.data)
+                        );
+                    }
+                }
                 SwarmEvent::NewListenAddr { address, .. } => {
                     println!("Local node is listening on {address}");
                 }
                 _ => {}
             }
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use libp2p::identity::Keypair;
+    use tokio::time::{timeout, Duration};
+
+    #[tokio::test]
+    async fn test_swarm_initialization() {
+        let result = run(3, 1, 1).await;
+        assert!(result.is_ok());
+    }
+
+    #[tokio::test]
+    async fn test_topic_subscription() {
+        let key = Keypair::generate_ed25519();
+        let peer_id = PeerId::from(key.public());
+        
+        let transport = tcp::tokio::Transport::new(tcp::Config::default())
+            .upgrade(libp2p::core::upgrade::Version::V1)
+            .authenticate(noise::Config::new(&key).unwrap())
+            .multiplex(yamux::Config::default())
+            .boxed();
+
+        let gossipsub_config = gossipsub::ConfigBuilder::default()
+            .build()
+            .unwrap();
+
+        let mut swarm = SwarmBuilder::with_tokio_executor(
+            transport,
+            MyBehaviour {
+                gossipsub: gossipsub::Behaviour::new(
+                    gossipsub::MessageAuthenticity::Signed(key),
+                    gossipsub_config,
+                ).unwrap(),
+                mdns: mdns::tokio::Behaviour::new(
+                    mdns::Config::default(),
+                    peer_id,
+                ).unwrap(),
+            },
+            peer_id,
+        )
+        .build();
+
+        let topic = gossipsub::IdentTopic::new("test-net");
+        assert!(swarm.behaviour_mut().gossipsub.subscribe(&topic).is_ok());
+    }
+
+    #[tokio::test]
+    async fn test_message_publishing() {
+        let key = Keypair::generate_ed25519();
+        let peer_id = PeerId::from(key.public());
+
+        let transport = tcp::tokio::Transport::new(tcp::Config::default())
+            .upgrade(libp2p::core::upgrade::Version::V1)
+            .authenticate(noise::Config::new(&key).unwrap())
+            .multiplex(yamux::Config::default())
+            .boxed();
+
+        let gossipsub_config = gossipsub::ConfigBuilder::default()
+            .build()
+            .unwrap();
+
+        let mut swarm = SwarmBuilder::with_tokio_executor(
+            transport,
+            MyBehaviour {
+                gossipsub: gossipsub::Behaviour::new(
+                    gossipsub::MessageAuthenticity::Signed(key),
+                    gossipsub_config,
+                ).unwrap(),
+                mdns: mdns::tokio::Behaviour::new(
+                    mdns::Config::default(),
+                    peer_id,
+                ).unwrap(),
+            },
+            peer_id,
+        )
+        .build();
+
+        let topic = gossipsub::IdentTopic::new("test-net");
+        swarm.behaviour_mut().gossipsub.subscribe(&topic).unwrap();
+        
+        let publish_result = swarm.behaviour_mut()
+            .gossipsub
+            .publish(topic, b"test message".to_vec());
+        
+        assert!(publish_result.is_ok());
     }
 }
