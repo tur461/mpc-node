@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-libp2p = { version = "0.55", features = ["tokio", "gossipsub", "mdns", "noise", "macros", "tcp", "yamux", "quic"] }
+libp2p = { version = "0.55", features = ["tokio", "gossipsub", "mdns", "noise", "macros", "tcp", "yamux", "quic", "identify", "request-response"] }
 tokio = { version = "1", features = ["full"] }
 futures = "0.3"
 anyhow = "1.0"
@@ -17,4 +17,13 @@ sha2 = "0.10"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 rand = "0.8"
-
+async-trait = "0.1"
+hex = "0.4"
+blake3 = {version = "1.5", features = ["serde"]}
+ethereum-types = "0.14"
+ethers = { version = "2.0", features = ["ws", "rustls"] }
+web3 = "0.19"
+thiserror = "1.0"
+async-stream = "0.3"
+dashmap = "5.5"
+parking_lot = "0.12"
