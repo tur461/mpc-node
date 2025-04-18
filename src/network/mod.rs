@@ -8,13 +8,14 @@ use std::{
 use anyhow::Result;
 use futures::StreamExt;
 use libp2p::{
+    request_response::{cbor::Behaviour as CborReqRespBehaviour, Event as ReqRespEvent, Message as ReqRespMessage},
     gossipsub::{self, Message, TopicHash}, identity::Keypair, mdns::{self}, noise, swarm::{NetworkBehaviour, SwarmEvent}, tcp, yamux, PeerId, Transport
 };
 use tokio::sync::{mpsc, RwLock,};
 use tokio::{io, io::AsyncBufReadExt, select, io::Error};
 use tracing::{debug, info, warn};
 
-use crate::types::{NetworkMessage, PeerInfo, GossipsubMessage};
+use crate::types::{rpc::{build_mpc_behaviour, MPCCodec, MPCCodecRequest, MPCCodecResponse, MPCProtocol, RPCRequest, RPCResponse}, GossipsubMessage, NetworkMessage, PeerInfo};
 use crate::dkg::DKGNode;
 use crate::signing::SigningNode;
 use crate::consensus::ConsensusNode;
@@ -25,12 +26,14 @@ use crate::commands::CommandProcessor;
 pub struct MPCBehaviour {
     pub gossipsub: gossipsub::Behaviour,
     mdns: mdns::tokio::Behaviour,
+    pub request_response: CborReqRespBehaviour<MPCCodecRequest, MPCCodecResponse>
 }
 
 #[derive(Debug)]
 pub enum NetworkEvent {
     Gossipsub(gossipsub::Event),
     Mdns(mdns::Event),
+    RequestResponse(ReqRespEvent<RPCRequest, RPCResponse>),
 }
 
 impl From<gossipsub::Event> for NetworkEvent {
@@ -42,6 +45,12 @@ impl From<gossipsub::Event> for NetworkEvent {
 impl From<mdns::Event> for NetworkEvent {
     fn from(event: mdns::Event) -> Self {
         NetworkEvent::Mdns(event)
+    }
+}
+
+impl From<ReqRespEvent<RPCRequest, RPCResponse>> for NetworkEvent {
+    fn from(event: ReqRespEvent<RPCRequest, RPCResponse>) -> Self {
+        NetworkEvent::RequestResponse(event)
     }
 }
 
@@ -145,9 +154,12 @@ impl NetworkLayer {
             let mdns =
                 mdns::tokio::Behaviour::new(mdns_config, key.public().to_peer_id())?;
 
+            let request_response = build_mpc_behaviour();
+
             Ok(MPCBehaviour {
                 gossipsub,
                 mdns,
+                request_response,
             })
         })?
         .build();
@@ -185,6 +197,41 @@ impl NetworkLayer {
 
     async fn handle_swarm_event(&mut self, event: SwarmEvent<NetworkEvent>) -> Result<()> {
         match event {
+            SwarmEvent::Behaviour(NetworkEvent::RequestResponse(ReqRespEvent::Message { peer, message, .. })) => {
+                match message {
+                    ReqRespMessage::Request { request, channel, .. } => {
+                        let response = match request {
+                            RPCRequest::Ping => RPCResponse::Pong,
+                            RPCRequest::GetPeerInfo => {
+                                // Provide your implementation to get peer info
+                                RPCResponse::PeerInfo(PeerInfo {
+                                    addresses: vec![],
+                                    connected: true,
+                                })
+                            }
+                            RPCRequest::Custom { id, data } => {
+                                // Handle custom request
+                                RPCResponse::Custom { id, data }
+                            }
+                        };
+                        // swarm.behaviour_mut().request_response.send_response(channel, response)?;
+                    },
+                    ReqRespMessage::Response { response, .. } => {
+                        // here we need to handle RPC response
+                        info!("Received response: {:?}", response);
+                    }
+                    
+                }
+            }
+            SwarmEvent::Behaviour(NetworkEvent::RequestResponse(ReqRespEvent::OutboundFailure { peer, error, .. })) => {
+                warn!("Outbound failure to peer {}: {:?}", peer, error);
+            }
+            SwarmEvent::Behaviour(NetworkEvent::RequestResponse(ReqRespEvent::InboundFailure { peer, error, .. })) => {
+                warn!("Inbound failure to peer {}: {:?}", peer, error);
+            }
+            SwarmEvent::Behaviour(NetworkEvent::RequestResponse(ReqRespEvent::ResponseSent { peer, .. })) => {
+                warn!("Response sent to peer {}", peer);
+            }
             SwarmEvent::Behaviour(NetworkEvent::Mdns(mdns::Event::Discovered(peers))) => {
                 for (peer_id, addr) in peers {
                     info!("Discovered peer: {peer_id} at {addr}");
@@ -215,7 +262,8 @@ impl NetworkLayer {
                 self.handle_gossipsub_message(&message).await?;
             }
             SwarmEvent::NewListenAddr { address, .. } => {
-                info!("Listening on {}", address);
+                println!("Listening on {}", address);
+                println!("Listening for RPC connections on {}{}", address, MPCProtocol.as_ref());
             }
             _ => {}
         }
@@ -262,7 +310,14 @@ impl NetworkLayer {
             }
             NetworkMessage::DirectMessage { peer_id, data } => {
                 // Implement direct message sending using request-response protocol
-                warn!("Direct message sending not implemented yet");
+                let peer_id = PeerId::from_bytes(&hex::decode(peer_id)?)
+                    .map_err(|e| anyhow::anyhow!("Invalid peer ID: {}", e))?;
+                let request = RPCRequest::Custom {
+                    id: "custom".to_string(),
+                    data,
+                };
+                swarm.behaviour_mut().request_response.send_request(&peer_id, request);
+            
             }
         }
         Ok(())

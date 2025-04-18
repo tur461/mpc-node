@@ -4,7 +4,10 @@ use serde::{Deserialize, Serialize};
 mod bls;
 pub use bls::{SerializableG1Affine, SerializableScalar};
 
-#[derive(Debug, Clone)]
+pub mod rpc;
+
+
+#[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct PeerInfo {
     pub addresses: Vec<Multiaddr>,
     pub connected: bool,

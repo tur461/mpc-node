@@ -3,8 +3,16 @@ name = "mpc-node"
 version = "0.1.0"
 edition = "2021"
 
+[[bin]]
+name = "ptp"
+path = "src/bin/ptp.rs"
+
+[[bin]]
+name = "mpcn"
+path = "src/main.rs"
+
 [dependencies]
-libp2p = { version = "0.55", features = ["tokio", "gossipsub", "mdns", "noise", "macros", "tcp", "yamux", "quic", "identify", "request-response"] }
+libp2p = { version = "0.55", features = ["request-response", "cbor", "tokio", "gossipsub", "mdns", "noise", "macros", "tcp", "yamux", "quic", "identify", "request-response"] }
 tokio = { version = "1", features = ["full"] }
 futures = "0.3"
 anyhow = "1.0"
@@ -27,3 +35,4 @@ thiserror = "1.0"
 async-stream = "0.3"
 dashmap = "5.5"
 parking_lot = "0.12"
+serde_cbor = "0.11.2"
