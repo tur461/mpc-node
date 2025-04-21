@@ -64,7 +64,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
         match swarm.select_next_some().await {
             SwarmEvent::ConnectionEstablished { peer_id, connection_id, endpoint, num_established, concurrent_dial_errors, established_in } => {
                 println!("Established to {:?}", peer_id);
-                let rq = RPCRequest::Ping;
+                let rq = RPCRequest::StartDKG;
                 swarm.behaviour_mut().request_response.send_request(&peer_id, rq);
             }
             SwarmEvent::Behaviour(MyBehaviourEvent::RequestResponse(event)) => match event {

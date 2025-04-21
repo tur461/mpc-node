@@ -9,6 +9,8 @@ use serde::{Deserialize, Serialize};
 use futures::{AsyncRead, AsyncWrite, AsyncReadExt, AsyncWriteExt};
 use tracing::info;
 use std::{io, pin::Pin, future::Future};
+use crate::dkg::DKGStatus;
+
 use super::PeerInfo;
 
 pub type MPCCodecRequest = <MPCCodec as libp2p::request_response::Codec>::Request;
@@ -27,18 +29,23 @@ impl AsRef<str> for MPCProtocol {
 /// RPC request variants.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum RPCRequest {
-    Ping,
-    GetPeerInfo,
     Custom { id: String, data: Vec<u8> },
+    GetDKGStatus,
+    GetPeerInfo,
+    Ping,
+    StartDKG,
 }
 
 /// RPC response variants.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum RPCResponse {
-    Pong,
-    PeerInfo(PeerInfo),
     Custom { id: String, data: Vec<u8> },
+    DKGStarted,
+    DKGError(String),
+    DKGStatus {status: DKGStatus},
     Error(String),
+    PeerInfo(PeerInfo),
+    Pong,
 }
 
 /// CBOR + serde codec for our MPC protocol.

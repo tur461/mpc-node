@@ -25,8 +25,17 @@ pub enum DKGMessage {
     },
 }
 
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub enum DKGStatus {
+    New,
+    Error {kind: String},
+    Started,
+    Completed,
+}
+
 pub struct DKGNode {
     id: String,
+    status: DKGStatus,
     threshold: usize,
     total_nodes: usize,
     shares: RwLock<HashMap<String, KeyShare>>,
@@ -44,6 +53,7 @@ impl DKGNode {
     ) -> Self {
         Self {
             id,
+            status: DKGStatus::New,
             threshold,
             total_nodes,
             shares: RwLock::new(HashMap::new()),
@@ -60,12 +70,16 @@ impl DKGNode {
         }).await?;
         Ok(())
     }
+    
+    pub fn get_status(&self) -> DKGStatus {
+        self.status.clone()
+    }
 
     pub async fn start_dkg(&mut self) -> Result<()> {
         let polynomial = self.generate_polynomial()?;
         let shares = self.generate_shares(&polynomial)?;
         let commitments = self.generate_commitments(&polynomial)?;
-
+        self.status = DKGStatus::Started;
         self.broadcast_shares(shares, commitments).await?;
         Ok(())
     }

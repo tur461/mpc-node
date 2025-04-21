@@ -14,7 +14,7 @@ use tokio::{io, io::AsyncBufReadExt, select, io::Error};
 use tonic::transport::Server;
 use tracing::{debug, info, warn};
 
-use crate::{protos::intent::intent_service_server::IntentServiceServer, types::{rpc::{build_mpc_behaviour, MPCCodec, MPCCodecRequest, MPCCodecResponse, MPCProtocol, RPCRequest, RPCResponse}, GossipsubMessage, NetworkMessage, PeerInfo}};
+use crate::{dkg::DKGStatus, protos::intent::intent_service_server::IntentServiceServer, types::{rpc::{build_mpc_behaviour, MPCCodec, MPCCodecRequest, MPCCodecResponse, MPCProtocol, RPCRequest, RPCResponse}, GossipsubMessage, NetworkMessage, PeerInfo}};
 use crate::dkg::DKGNode;
 use crate::signing::SigningNode;
 use crate::consensus::ConsensusNode;
@@ -214,7 +214,26 @@ impl NetworkLayer {
                             RPCRequest::Custom { id, data } => {
                                 // Handle custom request
                                 RPCResponse::Custom { id, data }
-                            }
+                            },
+                            RPCRequest::StartDKG => {
+                                // handle dkg start
+                                match self.dkg_node.as_mut() {
+                                    Some(dkg) => {
+                                        dkg.start_dkg().await?;
+                                        RPCResponse::DKGStarted
+                                    }
+                                    None => RPCResponse::DKGError("dkg is not initialized.".to_string()),
+                                }
+                            },
+                            RPCRequest::GetDKGStatus => {
+                                let status = self
+                                    .dkg_node
+                                    .as_ref()
+                                    .map(|dkg| dkg.get_status())
+                                    .unwrap_or(DKGStatus::New);
+
+                                RPCResponse::DKGStatus { status }
+                            },
                         };
                         let _ = swarm.behaviour_mut().request_response.send_response(channel, response);
                     },
