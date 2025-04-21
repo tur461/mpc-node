@@ -1,10 +1,11 @@
 use libp2p::{
-    identity::{self, Keypair}, noise, request_response::{cbor::Behaviour as CborReqRespBehaviour, Event as ReqRespEvent, Message as ReqRespMsg, ProtocolSupport }, swarm::NetworkBehaviour, tcp, yamux, Multiaddr, PeerId, Swarm, Transport
+    identity::{self, Keypair}, noise, request_response::{cbor::Behaviour as CborReqRespBehaviour, Event as ReqRespEvent, Message as ReqRespMsg, ProtocolSupport }, swarm::{dial_opts::DialOpts, NetworkBehaviour}, tcp, yamux, Multiaddr, PeerId, Swarm, Transport
 };
 use mpc_node::types::rpc::{build_mpc_behaviour, MPCCodec, MPCCodecRequest, MPCCodecResponse, RPCRequest, RPCResponse};
 use serde::{Deserialize, Serialize};
 use std::{env, error::Error};
 use libp2p::futures::StreamExt;
+use libp2p::swarm::SwarmEvent;
 
 #[derive(NetworkBehaviour)]
 #[behaviour(out_event = "MyBehaviourEvent")]
@@ -55,11 +56,17 @@ async fn main() -> Result<(), Box<dyn Error>> {
         })?
         .build();
     swarm.dial(server_addr.clone())?;
+    
 
-    use libp2p::swarm::SwarmEvent;
+    
 
     loop {
         match swarm.select_next_some().await {
+            SwarmEvent::ConnectionEstablished { peer_id, connection_id, endpoint, num_established, concurrent_dial_errors, established_in } => {
+                println!("Established to {:?}", peer_id);
+                let rq = RPCRequest::Ping;
+                swarm.behaviour_mut().request_response.send_request(&peer_id, rq);
+            }
             SwarmEvent::Behaviour(MyBehaviourEvent::RequestResponse(event)) => match event {
                 ReqRespEvent::Message { peer, message, .. } => match message {
                     ReqRespMsg::Response { request_id, response } => {

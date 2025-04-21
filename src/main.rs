@@ -9,9 +9,14 @@ use mpc_node::{
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
-    tracing_subscriber::fmt()
-        .with_env_filter(EnvFilter::from_default_env())
-        .init();
+    let _ = tracing_subscriber::fmt()
+    .with_env_filter(EnvFilter::from_default_env())
+    .with_max_level(tracing::Level::INFO) // or INFO if you prefer
+    .with_target(false)
+    .with_thread_ids(false)
+    .with_thread_names(false)
+    .init();
+
 
     let threshold = 3;
     let total = 5;

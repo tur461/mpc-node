@@ -36,3 +36,9 @@ async-stream = "0.3"
 dashmap = "5.5"
 parking_lot = "0.12"
 serde_cbor = "0.11.2"
+tonic = "0.13.0"
+prost = "0.13.5"
+libp2p-grpc-rs = "0.1.2"
+
+[build-dependencies]
+tonic-build = "0.13.0"

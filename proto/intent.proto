@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package intent;
+
+service IntentService {
+  rpc SubmitIntent (IntentRequest) returns (IntentResponse);
+}
+
+message IntentRequest {
+  string source_chain_id = 1;
+  string destination_chain_id = 2;
+  string source_asset = 3;         // optional if native
+  string destination_asset = 4;    // optional if native
+  string ev_address = 5;
+  uint64 amount = 6;
+  bytes signature = 7;             // signed(tx)
+}
+
+message IntentResponse {
+  bool success = 1;
+  string message = 2;
+}

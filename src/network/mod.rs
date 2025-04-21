@@ -1,6 +1,5 @@
 use std::{
-    collections::{HashMap, HashSet},
-    time::Duration,
+    any::Any, collections::{HashMap, HashSet}, fmt::Debug, time::Duration
 };
 use std::{
     collections::hash_map::DefaultHasher, hash::{Hash, Hasher}
@@ -8,18 +7,19 @@ use std::{
 use anyhow::Result;
 use futures::StreamExt;
 use libp2p::{
-    request_response::{cbor::Behaviour as CborReqRespBehaviour, Event as ReqRespEvent, Message as ReqRespMessage},
-    gossipsub::{self, Message, TopicHash}, identity::Keypair, mdns::{self}, noise, swarm::{NetworkBehaviour, SwarmEvent}, tcp, yamux, PeerId, Transport
+    gossipsub::{self, Message, TopicHash}, identity::Keypair, mdns::{self}, noise, request_response::{cbor::Behaviour as CborReqRespBehaviour, Event as ReqRespEvent, Message as ReqRespMessage}, swarm::{ConnectionError, NetworkBehaviour, SwarmEvent}, tcp, yamux, PeerId, Swarm, Transport
 };
 use tokio::sync::{mpsc, RwLock,};
 use tokio::{io, io::AsyncBufReadExt, select, io::Error};
+use tonic::transport::Server;
 use tracing::{debug, info, warn};
 
-use crate::types::{rpc::{build_mpc_behaviour, MPCCodec, MPCCodecRequest, MPCCodecResponse, MPCProtocol, RPCRequest, RPCResponse}, GossipsubMessage, NetworkMessage, PeerInfo};
+use crate::{protos::intent::intent_service_server::IntentServiceServer, types::{rpc::{build_mpc_behaviour, MPCCodec, MPCCodecRequest, MPCCodecResponse, MPCProtocol, RPCRequest, RPCResponse}, GossipsubMessage, NetworkMessage, PeerInfo}};
 use crate::dkg::DKGNode;
 use crate::signing::SigningNode;
 use crate::consensus::ConsensusNode;
 use crate::commands::CommandProcessor;
+use crate::protos::intent::{IntentRequest, intent_service_server::IntentService};
 
 #[derive(NetworkBehaviour)]
 #[behaviour(out_event = "NetworkEvent")]
@@ -116,7 +116,7 @@ impl NetworkLayer {
     }
 
     pub async fn start(&mut self) -> Result<()> {
-
+        
         let mut swarm = libp2p::SwarmBuilder::with_existing_identity(self.local_key.clone())
         .with_tokio()
         .with_tcp(
@@ -170,11 +170,12 @@ impl NetworkLayer {
         println!("Local Peer ID: {}", self.local_peer_id);
 
         self.subscribe_to_default_topics(&mut swarm)?;
-
+        
         loop {
             tokio::select! {
                 event = swarm.select_next_some() => {
-                    self.handle_swarm_event(event).await?;
+                    info!("[SWARM] some");
+                    self.handle_swarm_event(event, &mut swarm).await?;
                 }
                 msg = self.message_rx.recv() => {
                     if let Some(msg) = msg {
@@ -195,9 +196,10 @@ impl NetworkLayer {
         Ok(())
     }
 
-    async fn handle_swarm_event(&mut self, event: SwarmEvent<NetworkEvent>) -> Result<()> {
+    async fn handle_swarm_event(&mut self, event: SwarmEvent<NetworkEvent>, swarm: &mut libp2p::Swarm<MPCBehaviour>) -> Result<()> {
         match event {
             SwarmEvent::Behaviour(NetworkEvent::RequestResponse(ReqRespEvent::Message { peer, message, .. })) => {
+                info!("RPC request: peer: {} response: {:?}",peer, message);
                 match message {
                     ReqRespMessage::Request { request, channel, .. } => {
                         let response = match request {
@@ -214,23 +216,24 @@ impl NetworkLayer {
                                 RPCResponse::Custom { id, data }
                             }
                         };
-                        // swarm.behaviour_mut().request_response.send_response(channel, response)?;
+                        let _ = swarm.behaviour_mut().request_response.send_response(channel, response);
                     },
                     ReqRespMessage::Response { response, .. } => {
                         // here we need to handle RPC response
+                        println!("RPC response: response: {:?}",response);
                         info!("Received response: {:?}", response);
                     }
                     
                 }
             }
             SwarmEvent::Behaviour(NetworkEvent::RequestResponse(ReqRespEvent::OutboundFailure { peer, error, .. })) => {
-                warn!("Outbound failure to peer {}: {:?}", peer, error);
+                info!("Outbound failure to peer {}: {:?}", peer, error);
             }
             SwarmEvent::Behaviour(NetworkEvent::RequestResponse(ReqRespEvent::InboundFailure { peer, error, .. })) => {
-                warn!("Inbound failure to peer {}: {:?}", peer, error);
+                info!("Inbound failure to peer {}: {:?}", peer, error);
             }
             SwarmEvent::Behaviour(NetworkEvent::RequestResponse(ReqRespEvent::ResponseSent { peer, .. })) => {
-                warn!("Response sent to peer {}", peer);
+                info!("Response sent to peer {}", peer);
             }
             SwarmEvent::Behaviour(NetworkEvent::Mdns(mdns::Event::Discovered(peers))) => {
                 for (peer_id, addr) in peers {
@@ -243,6 +246,7 @@ impl NetworkLayer {
                 println!("[NEW] Peers: {}", self.peers.read().await.values().filter(|peer| peer.connected).collect::<Vec<_>>().len());
             }
             SwarmEvent::Behaviour(NetworkEvent::Mdns(mdns::Event::Expired(peers))) => {
+                info!("[EXP]");
                 for (peer_id, _) in peers {
                     if let Some(peer) = self.peers.write().await.get_mut(&peer_id) {
                         peer.connected = false;
@@ -255,17 +259,30 @@ impl NetworkLayer {
                 propagation_source,
                 message,
             })) => {
-                debug!(
+                info!(
                     "Received message with id: {} from: {}",
                     message_id, propagation_source
                 );
                 self.handle_gossipsub_message(&message).await?;
             }
             SwarmEvent::NewListenAddr { address, .. } => {
-                println!("Listening on {}", address);
-                println!("Listening for RPC connections on {}{}", address, MPCProtocol.as_ref());
+                info!("Listening on {}", address);
+                info!("Listening for RPC connections on {}{}", address, MPCProtocol.as_ref());
             }
-            _ => {}
+            SwarmEvent::ConnectionClosed { peer_id, connection_id, endpoint, num_established, cause } => {
+                if let Some(ca) = cause {
+                    match ca {
+                        ConnectionError::IO(e) => {
+                            info!("[ERROR] Kind: {} RAW: {:?} ref: {:?} Full: {}", e.kind(), e.raw_os_error(), e.get_ref().as_slice(), e);
+                        }
+                        _ => {}
+                    }
+                }
+            }
+                
+            _ => {
+                info!("[EVENT] other");
+            }
         }
         Ok(())
     }
@@ -303,6 +320,7 @@ impl NetworkLayer {
         message: NetworkMessage,
         swarm: &mut libp2p::Swarm<MPCBehaviour>,
     ) -> Result<()> {
+        info!("[NW MSG] {:?}", message);
         match message {
             NetworkMessage::Broadcast { topic, data } => {
                 let topic_hash = gossipsub::IdentTopic::new(topic);

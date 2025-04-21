@@ -7,6 +7,7 @@ use libp2p::{
 };
 use serde::{Deserialize, Serialize};
 use futures::{AsyncRead, AsyncWrite, AsyncReadExt, AsyncWriteExt};
+use tracing::info;
 use std::{io, pin::Pin, future::Future};
 use super::PeerInfo;
 
@@ -62,6 +63,7 @@ impl RequestResponseCodec for MPCCodec {
         T: AsyncRead + Unpin + Send + 'async_trait,  // nonblocking read :contentReference[oaicite:4]{index=4}
         Self: 'async_trait,
     {
+        info!("[MPC REQ-RESP] Read req");
         Box::pin(async move {
             let mut buf = Vec::new();
             io.read_to_end(&mut buf).await?;      // collect the full request :contentReference[oaicite:5]{index=5}
@@ -82,6 +84,7 @@ impl RequestResponseCodec for MPCCodec {
         T: AsyncRead + Unpin + Send + 'async_trait,  // nonblocking read :contentReference[oaicite:6]{index=6}
         Self: 'async_trait,
     {
+        info!("[MPC REQ-RESP] Read resp");
         Box::pin(async move {
             let mut buf = Vec::new();
             io.read_to_end(&mut buf).await?;
@@ -103,6 +106,7 @@ impl RequestResponseCodec for MPCCodec {
         T: AsyncWrite + Unpin + Send + 'async_trait, // nonblocking write :contentReference[oaicite:7]{index=7}
         Self: 'async_trait,
     {
+        info!("[MPC REQ-RESP] Write req");
         Box::pin(async move {
             let data = serde_cbor::to_vec(&req)
                 .map_err(|e| io::Error::new(io::ErrorKind::InvalidData, e))?;
@@ -123,6 +127,7 @@ impl RequestResponseCodec for MPCCodec {
         T: AsyncWrite + Unpin + Send + 'async_trait, // nonblocking write :contentReference[oaicite:8]{index=8}
         Self: 'async_trait,
     {
+        info!("[MPC REQ-RESP] Write resp");
         Box::pin(async move {
             let data = serde_cbor::to_vec(&res)
                 .map_err(|e| io::Error::new(io::ErrorKind::InvalidData, e))?;
