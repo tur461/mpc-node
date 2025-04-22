@@ -9,6 +9,7 @@ use serde::{Deserialize, Serialize};
 use tokio::sync::RwLock;
 use tokio::sync::{mpsc};
 
+use crate::types::dkg::MSG_TOPIC_DKG;
 use crate::types::{KeyShare, NetworkMessage, SerializableG1Affine, SerializableScalar};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -70,7 +71,7 @@ impl DKGNode {
         }).await?;
         Ok(())
     }
-    
+
     pub fn get_status(&self) -> DKGStatus {
         self.status.clone()
     }
@@ -136,7 +137,7 @@ impl DKGNode {
         };
         
         let msg_bytes = serde_json::to_vec(&msg)?;
-        self.broadcast("dkg", &msg_bytes).await?;
+        self.broadcast(MSG_TOPIC_DKG, &msg_bytes).await?;
         Ok(())
     }
 
@@ -173,13 +174,18 @@ impl DKGNode {
                     is_valid: true,
                 };
                 let msg_bytes = serde_json::to_vec(&validation_msg)?;
-                self.broadcast("dkg", &msg_bytes).await?;
+                self.broadcast(MSG_TOPIC_DKG, &msg_bytes).await?;
             }
         }
         Ok(())
     }
 
-    fn verify_shares(&self, shares: &[KeyShare], commitments: &[G1Affine]) -> bool {
+    pub fn verify_share(&self, share: &SerializableScalar, commitments: &[SerializableG1Affine]) -> bool {
+        // Implement share verification logic using commitments
+        true // Placeholder
+    }
+
+    pub fn verify_shares(&self, shares: &[KeyShare], commitments: &[G1Affine]) -> bool {
         // Implement share verification logic using commitments
         true // Placeholder
     }

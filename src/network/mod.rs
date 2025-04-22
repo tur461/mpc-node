@@ -14,7 +14,7 @@ use tokio::{io, io::AsyncBufReadExt, select, io::Error};
 use tonic::transport::Server;
 use tracing::{debug, info, warn};
 
-use crate::{dkg::DKGStatus, protos::intent::intent_service_server::IntentServiceServer, types::{rpc::{build_mpc_behaviour, MPCCodec, MPCCodecRequest, MPCCodecResponse, MPCProtocol, RPCRequest, RPCResponse}, GossipsubMessage, NetworkMessage, PeerInfo}};
+use crate::{dkg::DKGStatus, protos::intent::intent_service_server::IntentServiceServer, types::{dkg::MSG_TOPIC_DKG, p2p::SerializablePeerId, rpc::{build_mpc_behaviour, MPCCodec, MPCCodecRequest, MPCCodecResponse, MPCProtocol, RPCRequest, RPCResponse}, GossipsubMessage, NetworkMessage, PeerInfo}};
 use crate::dkg::DKGNode;
 use crate::signing::SigningNode;
 use crate::consensus::ConsensusNode;
@@ -187,7 +187,7 @@ impl NetworkLayer {
     }
 
     fn subscribe_to_default_topics(&mut self, swarm: &mut libp2p::Swarm<MPCBehaviour>) -> Result<()> {
-        let topics = vec!["dkg", "signing", "consensus", "commands"];
+        let topics = vec![MSG_TOPIC_DKG, "signing", "consensus", "commands"];
         for topic in topics {
             let topic_hash = gossipsub::IdentTopic::new(topic);
             swarm.behaviour_mut().gossipsub.subscribe(&topic_hash)?;
@@ -197,6 +197,7 @@ impl NetworkLayer {
     }
 
     async fn handle_swarm_event(&mut self, event: SwarmEvent<NetworkEvent>, swarm: &mut libp2p::Swarm<MPCBehaviour>) -> Result<()> {
+        info!("[SWARM EVENT] {:?}", event);
         match event {
             SwarmEvent::Behaviour(NetworkEvent::RequestResponse(ReqRespEvent::Message { peer, message, .. })) => {
                 info!("RPC request: peer: {} response: {:?}",peer, message);
@@ -215,12 +216,12 @@ impl NetworkLayer {
                                 // Handle custom request
                                 RPCResponse::Custom { id, data }
                             },
-                            RPCRequest::StartDKG => {
+                            RPCRequest::StartADKG { threshold, participants } => {
                                 // handle dkg start
                                 match self.dkg_node.as_mut() {
                                     Some(dkg) => {
                                         dkg.start_dkg().await?;
-                                        RPCResponse::DKGStarted
+                                        RPCResponse::DKGStarted {peer_id: SerializablePeerId(peer)}
                                     }
                                     None => RPCResponse::DKGError("dkg is not initialized.".to_string()),
                                 }
@@ -234,15 +235,47 @@ impl NetworkLayer {
 
                                 RPCResponse::DKGStatus { status }
                             },
+                            RPCRequest::SendAVSSShare { dealer_id, share, commitments, .. } => {
+                                if self.dkg_node.is_none() {
+                                    RPCResponse::Error("DKG not initialized".to_string())
+                                } else if self.dkg_node.as_ref().unwrap().verify_share(&share, &commitments) {
+                                    RPCResponse::ShareAccepted
+                                } else {
+                                    RPCResponse::Error("Invalid share".into())
+                                }
+                            },
+                            _ => RPCResponse::Ack
                         };
                         let _ = swarm.behaviour_mut().request_response.send_response(channel, response);
                     },
-                    ReqRespMessage::Response { response, .. } => {
-                        // here we need to handle RPC response
-                        println!("RPC response: response: {:?}",response);
-                        info!("Received response: {:?}", response);
-                    }
-                    
+                    ReqRespMessage::Response { request_id, response } => {
+                        match response {
+                            RPCResponse::GotAVSSShare { dealer_id, receiver_id, share, commitments } => {
+                                // Handle AVSS share response here (maybe store in state?)
+                                // e.g., self.dkg_node.as_mut()?.handle_received_share(party_id, share, commitments);
+                                
+                            }
+            
+                            RPCResponse::DKGStarted {peer_id} => {
+                                // dkg started by sending peer
+                                info!("DKG has started by: {:?}", peer_id);
+                            }
+            
+                            RPCResponse::Error(err) => {
+                                // error received because of previous sent request
+                                warn!("Received error from peer {}: {}", peer, err);
+                            }
+
+                            RPCResponse::ShareAccepted => {
+                                // share accepted by the peer whom this node sent it to
+
+                            }
+            
+                            _ => {
+                                // Optionally handle other responses like DKGStatus, ShareAccepted, etc.
+                            }
+                        }
+                    }                    
                 }
             }
             SwarmEvent::Behaviour(NetworkEvent::RequestResponse(ReqRespEvent::OutboundFailure { peer, error, .. })) => {
@@ -308,7 +341,7 @@ impl NetworkLayer {
 
     async fn handle_gossipsub_message(&mut self, message: &Message) -> Result<()> {
         let msg: GossipsubMessage = serde_json::from_slice(&message.data)?;
-        
+        info!("[GMSG] {:?}", msg);
         match msg {
             GossipsubMessage::DKG(dkg_msg) => {
                 if let Some(dkg_node) = &mut self.dkg_node {
@@ -342,6 +375,7 @@ impl NetworkLayer {
         info!("[NW MSG] {:?}", message);
         match message {
             NetworkMessage::Broadcast { topic, data } => {
+                info!("[BCAST] topic: {}", topic);
                 let topic_hash = gossipsub::IdentTopic::new(topic);
                 swarm.behaviour_mut().gossipsub.publish(topic_hash, data)?;
             }

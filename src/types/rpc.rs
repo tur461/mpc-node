@@ -11,7 +11,7 @@ use tracing::info;
 use std::{io, pin::Pin, future::Future};
 use crate::dkg::DKGStatus;
 
-use super::PeerInfo;
+use super::{p2p::SerializablePeerId, PeerInfo, SerializableG1Affine, SerializableScalar};
 
 pub type MPCCodecRequest = <MPCCodec as libp2p::request_response::Codec>::Request;
 pub type MPCCodecResponse = <MPCCodec as libp2p::request_response::Codec>::Response;
@@ -34,18 +34,60 @@ pub enum RPCRequest {
     GetPeerInfo,
     Ping,
     StartDKG,
+
+    StartADKG { 
+        threshold: usize, 
+        participants: Vec<SerializablePeerId> 
+    },
+
+    SendAVSSShare {
+        dealer_id: SerializablePeerId,
+        receiver_id: SerializablePeerId,
+        share: SerializableScalar,
+        commitments: Vec<SerializableG1Affine>,
+    },
+
+    BroadcastCommitments {
+        dealer_id: SerializablePeerId,
+        commitments: Vec<SerializableG1Affine>,
+    },
+
+    SubmitComplaint {
+        dealer_id: SerializablePeerId,
+        from: SerializablePeerId,
+        reason: String, // e.g. "invalid share"
+    },
+
+    DeclareADKGComplete {
+        from: SerializablePeerId,
+        share: SerializableScalar,
+    },
 }
 
 /// RPC response variants.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum RPCResponse {
     Custom { id: String, data: Vec<u8> },
-    DKGStarted,
+    DKGStarted {peer_id: SerializablePeerId},
     DKGError(String),
     DKGStatus {status: DKGStatus},
     Error(String),
     PeerInfo(PeerInfo),
     Pong,
+    NoResponse,
+    Ack,
+    Verified,
+    ShareAccepted,
+    ComplaintAccepted,
+    FinishedADKG {
+        group_public_key: SerializableG1Affine,
+    },
+    GotAVSSShare {
+        dealer_id: SerializablePeerId,
+        receiver_id: SerializablePeerId,
+        share: SerializableScalar,
+        commitments: Vec<SerializableG1Affine>,
+    }
 }
 
 /// CBOR + serde codec for our MPC protocol.

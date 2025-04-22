@@ -5,6 +5,8 @@ mod bls;
 pub use bls::{SerializableG1Affine, SerializableScalar};
 
 pub mod rpc;
+pub mod dkg;
+pub mod p2p;
 
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
