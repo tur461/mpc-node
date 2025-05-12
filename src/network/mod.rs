@@ -14,7 +14,7 @@ use tokio::{io, io::AsyncBufReadExt, select, io::Error};
 use tonic::transport::Server;
 use tracing::{debug, info, warn};
 
-use crate::{dkg::DKGStatus, protos::intent::intent_service_server::IntentServiceServer, types::{dkg::MSG_TOPIC_DKG, p2p::SerializablePeerId, rpc::{build_mpc_behaviour, MPCCodec, MPCCodecRequest, MPCCodecResponse, MPCProtocol, RPCRequest, RPCResponse}, GossipsubMessage, NetworkMessage, PeerInfo}};
+use crate::{dkg::DKGStatus, protos::intent::intent_service_server::IntentServiceServer, types::{dkg::MSG_TOPIC_DKG, p2p::SerializablePeerId, rpc::{build_mpc_behaviour, MPCCodec, MPCCodecRequest, MPCCodecResponse, MPCProtocol, RPCRequest, RPCResponse}, GossipsubMessage, ChannelMessage, PeerInfo}};
 use crate::dkg::DKGNode;
 use crate::signing::SigningNode;
 use crate::consensus::ConsensusNode;
@@ -58,8 +58,8 @@ pub struct NetworkLayer {
     local_key: Keypair,
     local_peer_id: PeerId,
     peers: RwLock<HashMap<PeerId, PeerInfo>>,
-    message_tx: mpsc::Sender<NetworkMessage>,
-    message_rx: mpsc::Receiver<NetworkMessage>,
+    message_tx: mpsc::Sender<ChannelMessage>,
+    message_rx: mpsc::Receiver<ChannelMessage>,
     topics: HashSet<TopicHash>,
     dkg_node: Option<DKGNode>,
     signing_node: Option<SigningNode>,
@@ -103,11 +103,11 @@ impl NetworkLayer {
         self.command_processor = Some(processor);
     }
 
-    pub fn get_msg_tx(&self) -> mpsc::Sender<NetworkMessage> {
+    pub fn get_msg_tx(&self) -> mpsc::Sender<ChannelMessage> {
         self.message_tx.clone()
     }
 
-    pub fn get_msg_rx(&mut self) -> &mut mpsc::Receiver<NetworkMessage> {
+    pub fn get_msg_rx(&mut self) -> &mut mpsc::Receiver<ChannelMessage> {
         &mut self.message_rx
     }
 
@@ -177,9 +177,11 @@ impl NetworkLayer {
                     info!("[SWARM] some");
                     self.handle_swarm_event(event, &mut swarm).await?;
                 }
+                // only hit when there is anything on the mpsc channel
                 msg = self.message_rx.recv() => {
                     if let Some(msg) = msg {
-                        self.handle_network_message(msg, &mut swarm).await?;
+                        // lets handle the channel msg on the basis of its type
+                        self.handle_channel_message(msg, &mut swarm).await?;
                     }
                 }
             };
@@ -190,6 +192,7 @@ impl NetworkLayer {
         let topics = vec![MSG_TOPIC_DKG, "signing", "consensus", "commands"];
         for topic in topics {
             let topic_hash = gossipsub::IdentTopic::new(topic);
+            info!("topic hash for {} is {}", topic, topic_hash);
             swarm.behaviour_mut().gossipsub.subscribe(&topic_hash)?;
             self.topics.insert(topic_hash.hash());
         }
@@ -199,9 +202,19 @@ impl NetworkLayer {
     async fn handle_swarm_event(&mut self, event: SwarmEvent<NetworkEvent>, swarm: &mut libp2p::Swarm<MPCBehaviour>) -> Result<()> {
         info!("[SWARM EVENT] {:?}", event);
         match event {
-            SwarmEvent::Behaviour(NetworkEvent::RequestResponse(ReqRespEvent::Message { peer, message, .. })) => {
+            // if the event is of type RequestResponse
+            // and depending upon the nature like:
+            // if the branch is Response, the peer can send the type Request to other peers
+            // else type Response will be sent to other peers
+            // someone will initiate the process by sending a NetworkEvent::RequestResponse with msg type ReqRespMessage::Request
+            // to other peer(s)
+            // the other peer(s) will recieve the it as ReqRespMessage::Request under the event NetworkEvent::RequestResponse
+            // the reciever of the init will be one or many depending on how it was send
+            // if sent by calling on peer_id, the reciever will be one; if called on swarm, it'll be a broadcast
+            SwarmEvent::Behaviour(NetworkEvent::RequestResponse(ReqRespEvent::Message { peer, message, .. })) => { // peer.r
                 info!("RPC request: peer: {} response: {:?}",peer, message);
                 match message {
+                    // this peer will recieve a request from other peer(s) (incl testing agent(s))
                     ReqRespMessage::Request { request, channel, .. } => {
                         let response = match request {
                             RPCRequest::Ping => RPCResponse::Pong,
@@ -216,7 +229,8 @@ impl NetworkLayer {
                                 // Handle custom request
                                 RPCResponse::Custom { id, data }
                             },
-                            RPCRequest::StartADKG { threshold, participants } => {
+                            RPCRequest::StartADKG// {n, threshold } 
+                            => {
                                 // handle dkg start
                                 match self.dkg_node.as_mut() {
                                     Some(dkg) => {
@@ -226,14 +240,16 @@ impl NetworkLayer {
                                     None => RPCResponse::DKGError("dkg is not initialized.".to_string()),
                                 }
                             },
-                            RPCRequest::GetDKGStatus => {
+                            // This peer node will recieve a request from some external agent that will
+                            // connect with this peer to request it to initiate dkg
+                            RPCRequest::GetDKGStatus => { // peer.r.dkg.ptp
                                 let status = self
                                     .dkg_node
                                     .as_ref()
                                     .map(|dkg| dkg.get_status())
                                     .unwrap_or(DKGStatus::New);
 
-                                RPCResponse::DKGStatus { status }
+                                RPCResponse::DKGStatus { status } // send back to the agent at peer.send.ptp
                             },
                             RPCRequest::SendAVSSShare { dealer_id, share, commitments, .. } => {
                                 if self.dkg_node.is_none() {
@@ -246,9 +262,11 @@ impl NetworkLayer {
                             },
                             _ => RPCResponse::Ack
                         };
-                        let _ = swarm.behaviour_mut().request_response.send_response(channel, response);
+                        // here the following line will send to the other connected peers (incl any testing agent(s))
+                        let _ = swarm.behaviour_mut().request_response.send_response(channel, response); // peer.send.ptp
                     },
-                    ReqRespMessage::Response { request_id, response } => {
+                    // here peer(s) will recieve the msg sent by other peer by peer.send.ptp
+                    ReqRespMessage::Response { request_id, response } => { // peer.r
                         match response {
                             RPCResponse::GotAVSSShare { dealer_id, receiver_id, share, commitments } => {
                                 // Handle AVSS share response here (maybe store in state?)
@@ -306,7 +324,9 @@ impl NetworkLayer {
                 }
                 println!("[EXP] Peers: {}", self.peers.read().await.values().filter(|peer| peer.connected).collect::<Vec<_>>().len());
             }
-            SwarmEvent::Behaviour(NetworkEvent::Gossipsub(gossipsub::Event::Message { 
+            // if the msg sent by a peer has event type of Gossipsub, this branch will be hit on the 
+            // reciever(s)
+            SwarmEvent::Behaviour(NetworkEvent::Gossipsub(gossipsub::Event::Message { // dkg.r.2.0
                 message_id,
                 propagation_source,
                 message,
@@ -316,7 +336,10 @@ impl NetworkLayer {
                     message_id, propagation_source
                 );
                 self.handle_gossipsub_message(&message).await?;
-            }
+            },
+            SwarmEvent::Behaviour(NetworkEvent::Gossipsub(gossipsub::Event::Subscribed { peer_id, topic })) => {
+                info!("Subscribed to topic: {}", topic);
+            },
             SwarmEvent::NewListenAddr { address, .. } => {
                 info!("Listening on {}", address);
                 info!("Listening for RPC connections on {}{}", address, MPCProtocol.as_ref());
@@ -343,8 +366,13 @@ impl NetworkLayer {
         let msg: GossipsubMessage = serde_json::from_slice(&message.data)?;
         info!("[GMSG] {:?}", msg);
         match msg {
-            GossipsubMessage::DKG(dkg_msg) => {
+            // this must be used by broadcast in dkg (sending end)
+            // so, here it must match on the recieving end
+            GossipsubMessage::DKG(dkg_msg) => { // dkg.r.2.1
+                // here we unwrapped the outer gossipmsg wrap from 
+                // the msg bytes (check broadcast_shares() in dkg module)
                 if let Some(dkg_node) = &mut self.dkg_node {
+                    // now we can unwrap the internal dkg wrap to get the DKG related things
                     dkg_node.handle_message(dkg_msg).await?;
                 }
             }
@@ -367,19 +395,29 @@ impl NetworkLayer {
         Ok(())
     }
 
-    async fn handle_network_message(
+    // ChannelMessage is related to the MPSC channel only
+    // the channel is setup between 
+    // 1. dkg thread (writing end) and tokio async task executor (reading end)
+    async fn handle_channel_message(
         &mut self,
-        message: NetworkMessage,
+        message: ChannelMessage,
         swarm: &mut libp2p::Swarm<MPCBehaviour>,
     ) -> Result<()> {
-        info!("[NW MSG] {:?}", message);
+        info!("[handle_channel_message()] {:?}", message);
         match message {
-            NetworkMessage::Broadcast { topic, data } => {
-                info!("[BCAST] topic: {}", topic);
+            // this is used in the dkg code
+            ChannelMessage::Broadcast { topic, data } => { // dkg.s.1
+                info!("[handle_channel_message()] [BCAST] topic: {}", topic);
                 let topic_hash = gossipsub::IdentTopic::new(topic);
-                swarm.behaviour_mut().gossipsub.publish(topic_hash, data)?;
+                // here the channel msg is sent to other peer(s) as Gossipsub MSG type
+                // if peer(s) have already subscribed to this topic, they will recieve this 
+                // msg (check subscribe_to_default_topics())
+                let swarm_mut = swarm.behaviour_mut();
+                info!("[handle_channel_message()] [BCAST] prs count: {}", swarm_mut.gossipsub.all_peers().count());
+                swarm_mut.gossipsub.publish(topic_hash, data)?;
             }
-            NetworkMessage::DirectMessage { peer_id, data } => {
+            // this is not used anywhere yet
+            ChannelMessage::Unicast { peer_id, data } => {
                 // Implement direct message sending using request-response protocol
                 let peer_id = PeerId::from_bytes(&hex::decode(peer_id)?)
                     .map_err(|e| anyhow::anyhow!("Invalid peer ID: {}", e))?;
@@ -387,6 +425,9 @@ impl NetworkLayer {
                     id: "custom".to_string(),
                     data,
                 };
+                // this will send the channel msg as 
+                // NetworkEvent::RequestResponse under ReqRespMessage::Request type
+                // to just single peer
                 swarm.behaviour_mut().request_response.send_request(&peer_id, request);
             
             }
@@ -395,7 +436,7 @@ impl NetworkLayer {
     }
 
     pub async fn broadcast(&self, topic: &str, data: &[u8]) -> Result<()> {
-        self.message_tx.send(NetworkMessage::Broadcast {
+        self.message_tx.send(ChannelMessage::Broadcast {
             topic: topic.to_string(),
             data: data.to_vec(),
         }).await?;
@@ -403,7 +444,7 @@ impl NetworkLayer {
     }
 
     pub async fn send_direct_message(&self, peer_id: &str, data: &[u8]) -> Result<()> {
-        self.message_tx.send(NetworkMessage::DirectMessage {
+        self.message_tx.send(ChannelMessage::Unicast {
             peer_id: peer_id.to_string(),
             data: data.to_vec(),
         }).await?;

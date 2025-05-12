@@ -8,9 +8,10 @@ use rand::rngs::OsRng;
 use serde::{Deserialize, Serialize};
 use tokio::sync::RwLock;
 use tokio::sync::{mpsc};
+use tracing::info;
 
 use crate::types::dkg::MSG_TOPIC_DKG;
-use crate::types::{KeyShare, NetworkMessage, SerializableG1Affine, SerializableScalar};
+use crate::types::{GossipsubMessage, KeyShare, ChannelMessage, SerializableG1Affine, SerializableScalar};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum DKGMessage {
@@ -42,7 +43,7 @@ pub struct DKGNode {
     shares: RwLock<HashMap<String, KeyShare>>,
     commitments: RwLock<HashMap<String, Vec<G1Affine>>>,
     validations: RwLock<HashMap<String, Vec<bool>>>,
-    message_tx: mpsc::Sender<NetworkMessage>,
+    message_tx: mpsc::Sender<ChannelMessage>,
 }
 
 impl DKGNode {
@@ -50,7 +51,7 @@ impl DKGNode {
         id: String,
         threshold: usize,
         total_nodes: usize,
-        message_tx: mpsc::Sender<NetworkMessage>,
+        message_tx: mpsc::Sender<ChannelMessage>,
     ) -> Self {
         Self {
             id,
@@ -65,7 +66,8 @@ impl DKGNode {
     }
 
     pub async fn broadcast(&self, topic: &str, data: &[u8]) -> Result<()> {
-        self.message_tx.send(NetworkMessage::Broadcast {
+        info!("[dkg] bcast");
+        self.message_tx.send(ChannelMessage::Broadcast {
             topic: topic.to_string(),
             data: data.to_vec(),
         }).await?;
@@ -130,13 +132,15 @@ impl DKGNode {
         shares: Vec<KeyShare>,
         commitments: Vec<SerializableG1Affine>,
     ) -> Result<()> {
-        let msg = DKGMessage::ShareDistribution {
+        info!("[dkg] bcast shares");
+        let dkg_msg = DKGMessage::ShareDistribution {
             from: self.id.clone(),
             shares,
             commitments,
         };
+        let gossip_wrap = GossipsubMessage::DKG(dkg_msg);
         
-        let msg_bytes = serde_json::to_vec(&msg)?;
+        let msg_bytes = serde_json::to_vec(&gossip_wrap)?;
         self.broadcast(MSG_TOPIC_DKG, &msg_bytes).await?;
         Ok(())
     }

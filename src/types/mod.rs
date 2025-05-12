@@ -16,12 +16,12 @@ pub struct PeerInfo {
 }
 
 #[derive(Debug, Clone)]
-pub enum NetworkMessage {
+pub enum ChannelMessage {
     Broadcast {
         topic: String,
         data: Vec<u8>,
     },
-    DirectMessage {
+    Unicast {
         peer_id: String,
         data: Vec<u8>,
     },

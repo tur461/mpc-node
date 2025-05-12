@@ -1,0 +1,22 @@
+[2m2025-05-12T12:41:06.195693Z[0m [32m INFO[0m [3mlocal_peer_id[0m[2m=[0m12D3KooWJm9x12vikZMmBntbJRmsLszfqE2Y29mz3DahvBNAHfYP
+[2m2025-05-12T12:41:06.196717Z[0m [32m INFO[0m topic hash for topic-dkg is topic-dkg
+[2m2025-05-12T12:41:06.197029Z[0m [32m INFO[0m topic hash for signing is signing
+[2m2025-05-12T12:41:06.197050Z[0m [32m INFO[0m topic hash for consensus is consensus
+[2m2025-05-12T12:41:06.197062Z[0m [32m INFO[0m topic hash for commands is commands
+[2m2025-05-12T12:41:06.197118Z[0m [32m INFO[0m creating instance on iface address [3maddress[0m[2m=[0m192.168.10.36
+[2m2025-05-12T12:41:06.197491Z[0m [32m INFO[0m [SWARM] some
+[2m2025-05-12T12:41:06.197517Z[0m [32m INFO[0m [SWARM EVENT] NewListenAddr { listener_id: ListenerId(1), address: /ip4/127.0.0.1/tcp/52623 }
+[2m2025-05-12T12:41:06.197553Z[0m [32m INFO[0m Listening on /ip4/127.0.0.1/tcp/52623
+[2m2025-05-12T12:41:06.197563Z[0m [32m INFO[0m Listening for RPC connections on /ip4/127.0.0.1/tcp/52623/mpc/1.0.0
+[2m2025-05-12T12:41:06.197636Z[0m [32m INFO[0m [SWARM] some
+[2m2025-05-12T12:41:06.197646Z[0m [32m INFO[0m [SWARM EVENT] NewListenAddr { listener_id: ListenerId(1), address: /ip4/192.168.10.36/tcp/52623 }
+[2m2025-05-12T12:41:06.197656Z[0m [32m INFO[0m Listening on /ip4/192.168.10.36/tcp/52623
+[2m2025-05-12T12:41:06.197665Z[0m [32m INFO[0m Listening for RPC connections on /ip4/192.168.10.36/tcp/52623/mpc/1.0.0
+[2m2025-05-12T12:41:06.197717Z[0m [32m INFO[0m [SWARM] some
+[2m2025-05-12T12:41:06.197732Z[0m [32m INFO[0m [SWARM EVENT] NewListenAddr { listener_id: ListenerId(2), address: /ip4/127.0.0.1/udp/62222/quic-v1 }
+[2m2025-05-12T12:41:06.197746Z[0m [32m INFO[0m Listening on /ip4/127.0.0.1/udp/62222/quic-v1
+[2m2025-05-12T12:41:06.197756Z[0m [32m INFO[0m Listening for RPC connections on /ip4/127.0.0.1/udp/62222/quic-v1/mpc/1.0.0
+[2m2025-05-12T12:41:06.197784Z[0m [32m INFO[0m [SWARM] some
+[2m2025-05-12T12:41:06.197792Z[0m [32m INFO[0m [SWARM EVENT] NewListenAddr { listener_id: ListenerId(2), address: /ip4/192.168.10.36/udp/62222/quic-v1 }
+[2m2025-05-12T12:41:06.197802Z[0m [32m INFO[0m Listening on /ip4/192.168.10.36/udp/62222/quic-v1
+[2m2025-05-12T12:41:06.197811Z[0m [32m INFO[0m Listening for RPC connections on /ip4/192.168.10.36/udp/62222/quic-v1/mpc/1.0.0

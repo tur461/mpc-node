@@ -7,7 +7,7 @@ use serde::{Deserialize, Serialize};
 use tokio::sync::{mpsc, RwLock};
 
 use crate::network::NetworkLayer;
-use crate::types::{KeyShare, NetworkMessage, SerializableG1Affine, SerializableScalar};
+use crate::types::{KeyShare, ChannelMessage, SerializableG1Affine, SerializableScalar};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct FrostCommitment {
@@ -35,7 +35,7 @@ pub struct SigningNode {
     nonces: Vec<(Scalar, Scalar)>,
     commitments: RwLock<HashMap<String, Vec<FrostCommitment>>>,
     signature_shares: RwLock<HashMap<String, Scalar>>,
-    message_tx: mpsc::Sender<NetworkMessage>,
+    message_tx: mpsc::Sender<ChannelMessage>,
 }
 
 impl SigningNode {
@@ -44,7 +44,7 @@ impl SigningNode {
         threshold: usize,
         key_share: KeyShare,
         group_key: G1Projective,
-        message_tx: mpsc::Sender<NetworkMessage>,
+        message_tx: mpsc::Sender<ChannelMessage>,
     ) -> Self {
         Self {
             id,
@@ -59,7 +59,7 @@ impl SigningNode {
     }
 
     pub async fn broadcast(&self, topic: &str, data: &[u8]) -> Result<()> {
-        self.message_tx.send(NetworkMessage::Broadcast {
+        self.message_tx.send(ChannelMessage::Broadcast {
             topic: topic.to_string(),
             data: data.to_vec(),
         }).await?;

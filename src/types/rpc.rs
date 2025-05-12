@@ -35,10 +35,12 @@ pub enum RPCRequest {
     Ping,
     StartDKG,
 
-    StartADKG { 
-        threshold: usize, 
-        participants: Vec<SerializablePeerId> 
-    },
+    StartADKG, 
+    // { 
+    //     n: usize,
+    //     threshold: usize, 
+    //     // participants: Vec<SerializablePeerId> 
+    // },
 
     SendAVSSShare {
         dealer_id: SerializablePeerId,
