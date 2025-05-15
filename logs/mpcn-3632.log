@@ -1,0 +1,26 @@
+[2m2025-05-15T10:47:13.105622Z[0m [32m INFO[0m [3mlocal_peer_id[0m[2m=[0m12D3KooWFpcuGeRGy2TrEdMCRPDHAFiFwz3UqXJ55WzvQmAhtawY
+[2m2025-05-15T10:47:13.106960Z[0m [32m INFO[0m topic hash for topic-dkg is topic-dkg
+[2m2025-05-15T10:47:13.107338Z[0m [32m INFO[0m topic hash for signing is signing
+[2m2025-05-15T10:47:13.107362Z[0m [32m INFO[0m topic hash for consensus is consensus
+[2m2025-05-15T10:47:13.107377Z[0m [32m INFO[0m topic hash for commands is commands
+[2m2025-05-15T10:47:13.107477Z[0m [32m INFO[0m creating instance on iface address [3maddress[0m[2m=[0m172.16.15.208
+[2m2025-05-15T10:47:13.107797Z[0m [32m INFO[0m [SWARM] some
+[2m2025-05-15T10:47:13.107832Z[0m [32m INFO[0m [SWARM EVENT] NewListenAddr { listener_id: ListenerId(1), address: /ip4/127.0.0.1/tcp/56455 }
+[2m2025-05-15T10:47:13.107888Z[0m [32m INFO[0m Listening on /ip4/127.0.0.1/tcp/56455
+[2m2025-05-15T10:47:13.107908Z[0m [32m INFO[0m Listening for RPC connections on /ip4/127.0.0.1/tcp/56455/mpc/1.0.0
+[2m2025-05-15T10:47:13.107941Z[0m [32m INFO[0m [SWARM] some
+[2m2025-05-15T10:47:13.107955Z[0m [32m INFO[0m [SWARM EVENT] NewListenAddr { listener_id: ListenerId(1), address: /ip4/172.16.15.208/tcp/56455 }
+[2m2025-05-15T10:47:13.107976Z[0m [32m INFO[0m Listening on /ip4/172.16.15.208/tcp/56455
+[2m2025-05-15T10:47:13.107992Z[0m [32m INFO[0m Listening for RPC connections on /ip4/172.16.15.208/tcp/56455/mpc/1.0.0
+[2m2025-05-15T10:47:13.108069Z[0m [32m INFO[0m [SWARM] some
+[2m2025-05-15T10:47:13.108083Z[0m [32m INFO[0m [SWARM EVENT] NewListenAddr { listener_id: ListenerId(2), address: /ip4/127.0.0.1/udp/52422/quic-v1 }
+[2m2025-05-15T10:47:13.108102Z[0m [32m INFO[0m Listening on /ip4/127.0.0.1/udp/52422/quic-v1
+[2m2025-05-15T10:47:13.108118Z[0m [32m INFO[0m Listening for RPC connections on /ip4/127.0.0.1/udp/52422/quic-v1/mpc/1.0.0
+[2m2025-05-15T10:47:13.108153Z[0m [32m INFO[0m [SWARM] some
+[2m2025-05-15T10:47:13.108185Z[0m [32m INFO[0m [SWARM EVENT] NewListenAddr { listener_id: ListenerId(2), address: /ip4/172.16.15.208/udp/52422/quic-v1 }
+[2m2025-05-15T10:47:13.108213Z[0m [32m INFO[0m Listening on /ip4/172.16.15.208/udp/52422/quic-v1
+[2m2025-05-15T10:47:13.108231Z[0m [32m INFO[0m Listening for RPC connections on /ip4/172.16.15.208/udp/52422/quic-v1/mpc/1.0.0
+[2m2025-05-15T10:47:13.108948Z[0m [31mERROR[0m error sending packet on iface address No route to host (os error 65) [3maddress[0m[2m=[0m172.16.15.208
+[2m2025-05-15T10:47:14.111773Z[0m [31mERROR[0m error sending packet on iface address No route to host (os error 65) [3maddress[0m[2m=[0m172.16.15.208
+[2m2025-05-15T10:47:16.114618Z[0m [31mERROR[0m error sending packet on iface address No route to host (os error 65) [3maddress[0m[2m=[0m172.16.15.208
+[2m2025-05-15T10:47:20.117222Z[0m [31mERROR[0m error sending packet on iface address No route to host (os error 65) [3maddress[0m[2m=[0m172.16.15.208

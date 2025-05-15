@@ -1,5 +1,5 @@
 use std::{
-    any::Any, collections::{HashMap, HashSet}, fmt::Debug, time::Duration
+    any::Any, collections::{HashMap, HashSet}, env, fmt::Debug, time::Duration
 };
 use std::{
     collections::hash_map::DefaultHasher, hash::{Hash, Hasher}
@@ -7,7 +7,7 @@ use std::{
 use anyhow::Result;
 use futures::StreamExt;
 use libp2p::{
-    gossipsub::{self, Message, TopicHash}, identity::Keypair, mdns::{self}, noise, request_response::{cbor::Behaviour as CborReqRespBehaviour, Event as ReqRespEvent, Message as ReqRespMessage}, swarm::{ConnectionError, NetworkBehaviour, SwarmEvent}, tcp, yamux, PeerId, Swarm, Transport
+    gossipsub::{self, Message, TopicHash}, identity::Keypair, mdns::{self}, noise, request_response::{cbor::Behaviour as CborReqRespBehaviour, Event as ReqRespEvent, Message as ReqRespMessage}, swarm::{ConnectionError, NetworkBehaviour, SwarmEvent}, tcp, yamux, Multiaddr, PeerId, Swarm, Transport
 };
 use tokio::sync::{mpsc, RwLock,};
 use tokio::{io, io::AsyncBufReadExt, select, io::Error};
@@ -166,6 +166,15 @@ impl NetworkLayer {
 
         swarm.listen_on("/ip4/0.0.0.0/tcp/0".parse()?)?;
         swarm.listen_on("/ip4/0.0.0.0/udp/0/quic-v1".parse()?)?;
+
+        let args: Vec<String> = env::args().collect();
+        if args.len() >= 2 {
+            // eprintln!("Usage: {} <multiaddr>", args[0]);
+            // std::process::exit(1);
+            let server_addr: Multiaddr = args[1].parse()?;
+            println!("Dialing address: {}", server_addr);
+            swarm.dial(server_addr.clone())?;
+        }
 
         println!("Local Peer ID: {}", self.local_peer_id);
 
@@ -414,7 +423,9 @@ impl NetworkLayer {
                 // msg (check subscribe_to_default_topics())
                 let swarm_mut = swarm.behaviour_mut();
                 info!("[handle_channel_message()] [BCAST] prs count: {}", swarm_mut.gossipsub.all_peers().count());
-                swarm_mut.gossipsub.publish(topic_hash, data)?;
+                if let Err(e) = swarm_mut.gossipsub.publish(topic_hash, data) {
+                    info!("error: {:?}",e);
+                };
             }
             // this is not used anywhere yet
             ChannelMessage::Unicast { peer_id, data } => {

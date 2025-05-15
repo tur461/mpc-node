@@ -1,0 +1,195 @@
+[2m2025-05-15T10:56:58.288114Z[0m [32m INFO[0m [3mlocal_peer_id[0m[2m=[0m12D3KooWLkM7vGRSDGsZHVUmLEgL3rGXo6cAuVCxgWMkuKKrH4jg
+[2m2025-05-15T10:56:58.288860Z[0m [32m INFO[0m topic hash for topic-dkg is topic-dkg
+[2m2025-05-15T10:56:58.288955Z[0m [32m INFO[0m topic hash for signing is signing
+[2m2025-05-15T10:56:58.288979Z[0m [32m INFO[0m topic hash for consensus is consensus
+[2m2025-05-15T10:56:58.288995Z[0m [32m INFO[0m topic hash for commands is commands
+[2m2025-05-15T10:56:58.289038Z[0m [32m INFO[0m creating instance on iface address [3maddress[0m[2m=[0m172.16.15.208
+[2m2025-05-15T10:56:58.289194Z[0m [32m INFO[0m [SWARM] some
+[2m2025-05-15T10:56:58.289214Z[0m [32m INFO[0m [SWARM EVENT] NewListenAddr { listener_id: ListenerId(1), address: /ip4/127.0.0.1/tcp/59073 }
+[2m2025-05-15T10:56:58.289243Z[0m [32m INFO[0m Listening on /ip4/127.0.0.1/tcp/59073
+[2m2025-05-15T10:56:58.289257Z[0m [32m INFO[0m Listening for RPC connections on /ip4/127.0.0.1/tcp/59073/mpc/1.0.0
+[2m2025-05-15T10:56:58.289288Z[0m [32m INFO[0m [SWARM] some
+[2m2025-05-15T10:56:58.289301Z[0m [32m INFO[0m [SWARM EVENT] NewListenAddr { listener_id: ListenerId(1), address: /ip4/172.16.15.208/tcp/59073 }
+[2m2025-05-15T10:56:58.289318Z[0m [32m INFO[0m Listening on /ip4/172.16.15.208/tcp/59073
+[2m2025-05-15T10:56:58.289332Z[0m [32m INFO[0m Listening for RPC connections on /ip4/172.16.15.208/tcp/59073/mpc/1.0.0
+[2m2025-05-15T10:56:58.289377Z[0m [32m INFO[0m [SWARM] some
+[2m2025-05-15T10:56:58.289393Z[0m [32m INFO[0m [SWARM EVENT] NewListenAddr { listener_id: ListenerId(2), address: /ip4/127.0.0.1/udp/52554/quic-v1 }
+[2m2025-05-15T10:56:58.289410Z[0m [32m INFO[0m Listening on /ip4/127.0.0.1/udp/52554/quic-v1
+[2m2025-05-15T10:56:58.289425Z[0m [32m INFO[0m Listening for RPC connections on /ip4/127.0.0.1/udp/52554/quic-v1/mpc/1.0.0
+[2m2025-05-15T10:56:58.289456Z[0m [32m INFO[0m [SWARM] some
+[2m2025-05-15T10:56:58.289467Z[0m [32m INFO[0m [SWARM EVENT] NewListenAddr { listener_id: ListenerId(2), address: /ip4/172.16.15.208/udp/52554/quic-v1 }
+[2m2025-05-15T10:56:58.289483Z[0m [32m INFO[0m Listening on /ip4/172.16.15.208/udp/52554/quic-v1
+[2m2025-05-15T10:56:58.289498Z[0m [32m INFO[0m Listening for RPC connections on /ip4/172.16.15.208/udp/52554/quic-v1/mpc/1.0.0
+[2m2025-05-15T10:56:58.290451Z[0m [31mERROR[0m error sending packet on iface address No route to host (os error 65) [3maddress[0m[2m=[0m172.16.15.208
+[2m2025-05-15T10:56:59.292498Z[0m [31mERROR[0m error sending packet on iface address No route to host (os error 65) [3maddress[0m[2m=[0m172.16.15.208
+[2m2025-05-15T10:57:01.294560Z[0m [31mERROR[0m error sending packet on iface address No route to host (os error 65) [3maddress[0m[2m=[0m172.16.15.208
+[2m2025-05-15T10:57:05.297899Z[0m [31mERROR[0m error sending packet on iface address No route to host (os error 65) [3maddress[0m[2m=[0m172.16.15.208
+[2m2025-05-15T10:57:13.300154Z[0m [31mERROR[0m error sending packet on iface address No route to host (os error 65) [3maddress[0m[2m=[0m172.16.15.208
+[2m2025-05-15T10:57:23.341783Z[0m [31mERROR[0m error sending packet on iface address No route to host (os error 65) [3maddress[0m[2m=[0m172.16.15.208
+[2m2025-05-15T10:57:33.383741Z[0m [31mERROR[0m error sending packet on iface address No route to host (os error 65) [3maddress[0m[2m=[0m172.16.15.208
+[2m2025-05-15T10:57:43.428128Z[0m [31mERROR[0m error sending packet on iface address No route to host (os error 65) [3maddress[0m[2m=[0m172.16.15.208
+[2m2025-05-15T10:57:53.465539Z[0m [31mERROR[0m error sending packet on iface address No route to host (os error 65) [3maddress[0m[2m=[0m172.16.15.208
+[2m2025-05-15T10:58:03.506134Z[0m [31mERROR[0m error sending packet on iface address No route to host (os error 65) [3maddress[0m[2m=[0m172.16.15.208
+[2m2025-05-15T10:58:04.890470Z[0m [32m INFO[0m [SWARM] some
+[2m2025-05-15T10:58:04.890516Z[0m [32m INFO[0m [SWARM EVENT] IncomingConnection { connection_id: ConnectionId(1), local_addr: /ip4/172.16.15.208/tcp/59073, send_back_addr: /ip4/172.16.15.208/tcp/59378 }
+[2m2025-05-15T10:58:04.890560Z[0m [32m INFO[0m [EVENT] other
+[2m2025-05-15T10:58:04.895215Z[0m [32m INFO[0m [SWARM] some
+[2m2025-05-15T10:58:04.895247Z[0m [32m INFO[0m [SWARM EVENT] ConnectionEstablished { peer_id: PeerId("12D3KooWCeMYgiiQfsGZDfBeQemvd7cj4ns4Jd9hbsyooaXheBzH"), connection_id: ConnectionId(1), endpoint: Listener { local_addr: /ip4/172.16.15.208/tcp/59073, send_back_addr: /ip4/172.16.15.208/tcp/59378 }, num_established: 1, concurrent_dial_errors: None, established_in: 4.471667ms }
+[2m2025-05-15T10:58:04.895316Z[0m [32m INFO[0m [EVENT] other
+[2m2025-05-15T10:58:04.896048Z[0m [32m INFO[0m [SWARM] some
+[2m2025-05-15T10:58:04.896081Z[0m [32m INFO[0m [SWARM EVENT] Behaviour(RequestResponse(Message { peer: PeerId("12D3KooWCeMYgiiQfsGZDfBeQemvd7cj4ns4Jd9hbsyooaXheBzH"), connection_id: ConnectionId(1), message: Request { request_id: InboundRequestId(1), request: StartADKG, channel: ResponseChannel { sender: Sender { complete: false } } } }))
+[2m2025-05-15T10:58:04.896176Z[0m [32m INFO[0m RPC request: peer: 12D3KooWCeMYgiiQfsGZDfBeQemvd7cj4ns4Jd9hbsyooaXheBzH response: Request { request_id: InboundRequestId(1), request: StartADKG, channel: ResponseChannel { sender: Sender { complete: false } } }
+[2m2025-05-15T10:58:04.917719Z[0m [32m INFO[0m [handle_channel_message()] Broadcast { topic: "topic-dkg", data: [123, 34, 83, 104, 97, 114, 101, 68, 105, 115, 116, 114, 105, 98, 117, 116, 105, 111, 110, 34, 58, 123, 34, 102, 114, 111, 109, 34, 58, 34, 49, 50, 68, 51, 75, 111, 111, 87, 76, 107, 77, 55, 118, 71, 82, 83, 68, 71, 115, 90, 72, 86, 85, 109, 76, 69, 103, 76, 51, 114, 71, 88, 111, 54, 99, 65, 117, 86, 67, 120, 103, 87, 77, 107, 117, 75, 75, 114, 72, 52, 106, 103, 34, 44, 34, 115, 104, 97, 114, 101, 115, 34, 58, 91, 123, 34, 105, 110, 100, 101, 120, 34, 58, 49, 44, 34, 118, 97, 108, 117, 101, 34, 58, 91, 49, 52, 54, 44, 53, 49, 44, 49, 49, 48, 44, 49, 56, 44, 50, 52, 48, 44, 50, 50, 49, 44, 49, 50, 57, 44, 49, 56, 44, 50, 50, 53, 44, 50, 53, 48, 44, 51, 53, 44, 49, 52, 54, 44, 49, 56, 57, 44, 49, 52, 55, 44, 55, 50, 44, 50, 48, 53, 44, 50, 49, 52, 44, 49, 53, 52, 44, 49, 56, 54, 44, 56, 49, 44, 57, 49, 44, 56, 50, 44, 50, 52, 56, 44, 53, 49, 44, 49, 48, 51, 44, 50, 52, 57, 44, 49, 53, 54, 44, 52, 51, 44, 49, 49, 52, 44, 49, 53, 55, 44, 53, 48, 44, 52, 53, 93, 125, 44, 123, 34, 105, 110, 100, 101, 120, 34, 58, 50, 44, 34, 118, 97, 108, 117, 101, 34, 58, 91, 49, 56, 54, 44, 49, 56, 48, 44, 49, 57, 53, 44, 57, 44, 50, 52, 51, 44, 50, 48, 56, 44, 49, 52, 49, 44, 50, 49, 50, 44, 50, 53, 49, 44, 50, 49, 48, 44, 51, 49, 44, 49, 55, 48, 44, 49, 49, 44, 49, 55, 54, 44, 51, 44, 49, 52, 44, 50, 52, 51, 44, 49, 51, 57, 44, 49, 51, 55, 44, 49, 50, 50, 44, 53, 55, 44, 55, 51, 44, 49, 48, 56, 44, 49, 53, 44, 49, 53, 53, 44, 49, 55, 52, 44, 54, 44, 56, 49, 44, 51, 48, 44, 55, 51, 44, 50, 50, 53, 44, 53, 93, 125, 44, 123, 34, 105, 110, 100, 101, 120, 34, 58, 51, 44, 34, 118, 97, 108, 117, 101, 34, 58, 91, 55, 55, 44, 55, 53, 44, 52, 54, 44, 49, 48, 48, 44, 51, 53, 44, 50, 52, 44, 50, 52, 53, 44, 57, 51, 44, 50, 49, 48, 44, 51, 52, 44, 57, 44, 55, 44, 50, 53, 52, 44, 49, 54, 44, 49, 52, 54, 44, 49, 49, 53, 44, 49, 56, 53, 44, 49, 49, 48, 44, 49, 57, 55, 44, 54, 55, 44, 49, 55, 57, 44, 56, 54, 44, 49, 57, 56, 44, 50, 48, 50, 44, 49, 55, 55, 44, 50, 50, 49, 44, 52, 51, 44, 49, 51, 53, 44, 50, 49, 55, 44, 49, 54, 56, 44, 50, 49, 54, 44, 49, 57, 93, 125, 44, 123, 34, 105, 110, 100, 101, 120, 34, 58, 52, 44, 34, 118, 97, 108, 117, 101, 34, 58, 91, 56, 56, 44, 50, 48, 56, 44, 50, 52, 54, 44, 49, 49, 48, 44, 55, 52, 44, 51, 50, 44, 50, 48, 54, 44, 50, 51, 44, 49, 53, 56, 44, 51, 52, 44, 50, 51, 53, 44, 49, 53, 55, 44, 49, 49, 51, 44, 49, 48, 52, 44, 49, 57, 52, 44, 49, 49, 57, 44, 50, 48, 53, 44, 50, 52, 51, 44, 49, 50, 54, 44, 50, 50, 57, 44, 49, 56, 54, 44, 52, 57, 44, 49, 54, 51, 44, 49, 49, 51, 44, 49, 49, 53, 44, 55, 48, 44, 51, 49, 44, 50, 48, 51, 44, 56, 56, 44, 49, 50, 44, 52, 50, 44, 50, 54, 93, 125, 44, 123, 34, 105, 110, 100, 101, 120, 34, 58, 53, 44, 34, 118, 97, 108, 117, 101, 34, 58, 91, 50, 51, 51, 44, 50, 56, 44, 49, 48, 50, 44, 49, 49, 57, 44, 52, 56, 44, 56, 54, 44, 52, 55, 44, 49, 48, 55, 44, 49, 53, 49, 44, 49, 48, 50, 44, 50, 48, 55, 44, 57, 57, 44, 55, 48, 44, 49, 50, 44, 51, 51, 44, 50, 51, 50, 44, 50, 49, 53, 44, 49, 54, 51, 44, 49, 48, 52, 44, 49, 54, 49, 44, 55, 52, 44, 49, 48, 53, 44, 50, 49, 55, 44, 54, 54, 44, 50, 52, 48, 44, 51, 55, 44, 49, 52, 53, 44, 54, 55, 44, 49, 54, 52, 44, 49, 48, 54, 44, 50, 49, 50, 44, 55, 57, 93, 125, 93, 44, 34, 99, 111, 109, 109, 105, 116, 109, 101, 110, 116, 115, 34, 58, 91, 91, 49, 55, 56, 44, 49, 56, 56, 44, 49, 52, 48, 44, 50, 49, 52, 44, 54, 54, 44, 49, 57, 57, 44, 49, 49, 52, 44, 52, 54, 44, 49, 51, 55, 44, 50, 48, 49, 44, 49, 50, 44, 49, 51, 54, 44, 50, 50, 55, 44, 56, 56, 44, 53, 55, 44, 51, 51, 44, 57, 57, 44, 49, 57, 44, 54, 48, 44, 53, 50, 44, 50, 52, 57, 44, 50, 48, 49, 44, 56, 57, 44, 49, 55, 55, 44, 49, 54, 51, 44, 49, 44, 53, 56, 44, 57, 52, 44, 50, 52, 44, 53, 44, 51, 57, 44, 50, 51, 50, 44, 52, 52, 44, 49, 52, 44, 51, 48, 44, 50, 53, 52, 44, 49, 54, 49, 44, 51, 54, 44, 51, 53, 44, 56, 52, 44, 50, 50, 44, 50, 50, 54, 44, 55, 49, 44, 49, 51, 52, 44, 50, 55, 44, 57, 52, 44, 49, 51, 56, 44, 49, 49, 56, 93, 44, 91, 49, 55, 52, 44, 49, 53, 51, 44, 50, 53, 49, 44, 50, 49, 52, 44, 49, 54, 44, 55, 49, 44, 49, 48, 56, 44, 50, 53, 53, 44, 51, 53, 44, 56, 55, 44, 54, 54, 44, 49, 52, 54, 44, 49, 55, 48, 44, 50, 52, 50, 44, 49, 57, 56, 44, 50, 51, 55, 44, 50, 52, 54, 44, 49, 49, 53, 44, 50, 49, 51, 44, 49, 56, 52, 44, 51, 54, 44, 54, 56, 44, 49, 51, 49, 44, 50, 48, 52, 44, 49, 52, 56, 44, 56, 55, 44, 55, 49, 44, 50, 52, 48, 44, 49, 50, 49, 44, 49, 57, 44, 49, 51, 55, 44, 50, 52, 44, 51, 51, 44, 49, 50, 51, 44, 49, 55, 51, 44, 50, 52, 52, 44, 49, 56, 53, 44, 50, 49, 54, 44, 50, 48, 53, 44, 56, 51, 44, 49, 55, 48, 44, 54, 44, 50, 48, 53, 44, 49, 52, 49, 44, 49, 49, 53, 44, 50, 50, 57, 44, 49, 55, 44, 57, 50, 93, 44, 91, 49, 51, 51, 44, 50, 53, 53, 44, 50, 52, 50, 44, 49, 50, 54, 44, 50, 49, 49, 44, 50, 48, 51, 44, 50, 49, 50, 44, 57, 56, 44, 49, 50, 49, 44, 52, 48, 44, 49, 48, 50, 44, 50, 49, 53, 44, 49, 57, 44, 49, 54, 54, 44, 49, 49, 56, 44, 49, 51, 48, 44, 57, 48, 44, 55, 44, 49, 51, 53, 44, 49, 55, 49, 44, 49, 57, 51, 44, 49, 56, 53, 44, 50, 52, 56, 44, 51, 56, 44, 49, 52, 54, 44, 49, 55, 48, 44, 49, 44, 49, 48, 53, 44, 53, 51, 44, 51, 49, 44, 49, 49, 53, 44, 55, 56, 44, 52, 49, 44, 51, 54, 44, 49, 52, 44, 51, 56, 44, 54, 49, 44, 49, 49, 57, 44, 49, 53, 50, 44, 49, 50, 49, 44, 53, 57, 44, 49, 52, 52, 44, 50, 52, 50, 44, 49, 55, 50, 44, 49, 49, 51, 44, 50, 53, 44, 49, 53, 53, 44, 55, 54, 93, 44, 91, 49, 53, 50, 44, 51, 57, 44, 49, 48, 57, 44, 49, 52, 48, 44, 49, 49, 51, 44, 49, 52, 54, 44, 50, 49, 52, 44, 50, 51, 52, 44, 50, 57, 44, 50, 50, 56, 44, 50, 51, 52, 44, 49, 57, 56, 44, 49, 57, 44, 49, 54, 55, 44, 50, 48, 51, 44, 50, 52, 55, 44, 49, 54, 44, 56, 52, 44, 49, 52, 44, 49, 49, 52, 44, 50, 50, 56, 44, 49, 52, 48, 44, 52, 48, 44, 49, 57, 53, 44, 50, 50, 56, 44, 49, 52, 53, 44, 56, 56, 44, 54, 51, 44, 50, 52, 53, 44, 49, 56, 48, 44, 49, 57, 50, 44, 50, 49, 54, 44, 51, 48, 44, 49, 57, 48, 44, 49, 54, 57, 44, 54, 54, 44, 50, 52, 54, 44, 49, 48, 56, 44, 49, 52, 55, 44, 50, 52, 52, 44, 49, 54, 48, 44, 49, 56, 53, 44, 49, 51, 54, 44, 49, 53, 44, 50, 50, 51, 44, 49, 55, 51, 44, 49, 48, 50, 44, 49, 48, 93, 93, 125, 125] }
+[2m2025-05-15T10:58:04.918798Z[0m [32m INFO[0m [handle_channel_message()] [BCAST] topic: topic-dkg
+[2m2025-05-15T10:58:04.918832Z[0m [32m INFO[0m [handle_channel_message()] [BCAST] prs count: 1
+[2m2025-05-15T10:58:04.919100Z[0m [32m INFO[0m error: InsufficientPeers
+[2m2025-05-15T10:58:04.919150Z[0m [32m INFO[0m [SWARM] some
+[2m2025-05-15T10:58:04.919163Z[0m [32m INFO[0m [SWARM EVENT] Behaviour(Gossipsub(GossipsubNotSupported { peer_id: PeerId("12D3KooWCeMYgiiQfsGZDfBeQemvd7cj4ns4Jd9hbsyooaXheBzH") }))
+[2m2025-05-15T10:58:04.919211Z[0m [32m INFO[0m [EVENT] other
+[2m2025-05-15T10:58:04.919238Z[0m [32m INFO[0m [SWARM] some
+[2m2025-05-15T10:58:04.919248Z[0m [32m INFO[0m [SWARM EVENT] Behaviour(RequestResponse(ResponseSent { peer: PeerId("12D3KooWCeMYgiiQfsGZDfBeQemvd7cj4ns4Jd9hbsyooaXheBzH"), connection_id: ConnectionId(1), request_id: InboundRequestId(1) }))
+[2m2025-05-15T10:58:04.919298Z[0m [32m INFO[0m Response sent to peer 12D3KooWCeMYgiiQfsGZDfBeQemvd7cj4ns4Jd9hbsyooaXheBzH
+[2m2025-05-15T10:58:13.547484Z[0m [31mERROR[0m error sending packet on iface address No route to host (os error 65) [3maddress[0m[2m=[0m172.16.15.208
+[2m2025-05-15T10:58:14.923585Z[0m [32m INFO[0m [SWARM] some
+[2m2025-05-15T10:58:14.923822Z[0m [32m INFO[0m [SWARM EVENT] ConnectionClosed { peer_id: PeerId("12D3KooWCeMYgiiQfsGZDfBeQemvd7cj4ns4Jd9hbsyooaXheBzH"), connection_id: ConnectionId(1), endpoint: Listener { local_addr: /ip4/172.16.15.208/tcp/59073, send_back_addr: /ip4/172.16.15.208/tcp/59378 }, num_established: 0, cause: Some(KeepAliveTimeout) }
+[2m2025-05-15T10:58:23.588677Z[0m [31mERROR[0m error sending packet on iface address No route to host (os error 65) [3maddress[0m[2m=[0m172.16.15.208
+[2m2025-05-15T10:58:33.629263Z[0m [31mERROR[0m error sending packet on iface address No route to host (os error 65) [3maddress[0m[2m=[0m172.16.15.208
+[2m2025-05-15T10:58:43.670336Z[0m [31mERROR[0m error sending packet on iface address No route to host (os error 65) [3maddress[0m[2m=[0m172.16.15.208
+[2m2025-05-15T10:58:53.711952Z[0m [31mERROR[0m error sending packet on iface address No route to host (os error 65) [3maddress[0m[2m=[0m172.16.15.208
+[2m2025-05-15T10:59:03.753671Z[0m [31mERROR[0m error sending packet on iface address No route to host (os error 65) [3maddress[0m[2m=[0m172.16.15.208
+[2m2025-05-15T10:59:13.794974Z[0m [31mERROR[0m error sending packet on iface address No route to host (os error 65) [3maddress[0m[2m=[0m172.16.15.208
+[2m2025-05-15T10:59:23.836043Z[0m [31mERROR[0m error sending packet on iface address No route to host (os error 65) [3maddress[0m[2m=[0m172.16.15.208
+[2m2025-05-15T10:59:33.876885Z[0m [31mERROR[0m error sending packet on iface address No route to host (os error 65) [3maddress[0m[2m=[0m172.16.15.208
+[2m2025-05-15T10:59:34.818072Z[0m [32m INFO[0m dropping instance [3minstance[0m[2m=[0m172.16.15.208
+[2m2025-05-15T10:59:34.818342Z[0m [32m INFO[0m [SWARM] some
+[2m2025-05-15T10:59:34.818362Z[0m [32m INFO[0m [SWARM EVENT] ExpiredListenAddr { listener_id: ListenerId(1), address: /ip4/172.16.15.208/tcp/59073 }
+[2m2025-05-15T10:59:34.818400Z[0m [32m INFO[0m [EVENT] other
+[2m2025-05-15T10:59:34.818542Z[0m [32m INFO[0m [SWARM] some
+[2m2025-05-15T10:59:34.818557Z[0m [32m INFO[0m [SWARM EVENT] ExpiredListenAddr { listener_id: ListenerId(2), address: /ip4/172.16.15.208/udp/52554/quic-v1 }
+[2m2025-05-15T10:59:34.818573Z[0m [32m INFO[0m [EVENT] other
+[2m2025-05-15T10:59:53.562003Z[0m [32m INFO[0m [SWARM] some
+[2m2025-05-15T10:59:53.562169Z[0m [32m INFO[0m [SWARM EVENT] NewListenAddr { listener_id: ListenerId(1), address: /ip4/169.254.8.231/tcp/59073 }
+[2m2025-05-15T10:59:53.562483Z[0m [32m INFO[0m Listening on /ip4/169.254.8.231/tcp/59073
+[2m2025-05-15T10:59:53.562520Z[0m [32m INFO[0m Listening for RPC connections on /ip4/169.254.8.231/tcp/59073/mpc/1.0.0
+[2m2025-05-15T10:59:53.563070Z[0m [32m INFO[0m creating instance on iface address [3maddress[0m[2m=[0m169.254.8.231
+[2m2025-05-15T10:59:53.563577Z[0m [32m INFO[0m [SWARM] some
+[2m2025-05-15T10:59:53.563608Z[0m [32m INFO[0m [SWARM EVENT] NewListenAddr { listener_id: ListenerId(2), address: /ip4/169.254.8.231/udp/52554/quic-v1 }
+[2m2025-05-15T10:59:53.563652Z[0m [32m INFO[0m Listening on /ip4/169.254.8.231/udp/52554/quic-v1
+[2m2025-05-15T10:59:53.563686Z[0m [32m INFO[0m Listening for RPC connections on /ip4/169.254.8.231/udp/52554/quic-v1/mpc/1.0.0
+[2m2025-05-15T10:59:54.567631Z[0m [32m INFO[0m discovered peer on address [3mpeer[0m[2m=[0m12D3KooWEuruPhY3BMpqoRMHCYh1PxmqFku6qJGAohqP6bB7mAU8 [3maddress[0m[2m=[0m/ip4/169.254.8.231/udp/65340/quic-v1/p2p/12D3KooWEuruPhY3BMpqoRMHCYh1PxmqFku6qJGAohqP6bB7mAU8
+[2m2025-05-15T10:59:54.567907Z[0m [32m INFO[0m discovered peer on address [3mpeer[0m[2m=[0m12D3KooWEuruPhY3BMpqoRMHCYh1PxmqFku6qJGAohqP6bB7mAU8 [3maddress[0m[2m=[0m/ip4/169.254.8.231/tcp/58773/p2p/12D3KooWEuruPhY3BMpqoRMHCYh1PxmqFku6qJGAohqP6bB7mAU8
+[2m2025-05-15T10:59:54.568692Z[0m [32m INFO[0m [SWARM] some
+[2m2025-05-15T10:59:54.568730Z[0m [32m INFO[0m [SWARM EVENT] Behaviour(Mdns(Discovered([(PeerId("12D3KooWEuruPhY3BMpqoRMHCYh1PxmqFku6qJGAohqP6bB7mAU8"), /ip4/169.254.8.231/udp/65340/quic-v1/p2p/12D3KooWEuruPhY3BMpqoRMHCYh1PxmqFku6qJGAohqP6bB7mAU8), (PeerId("12D3KooWEuruPhY3BMpqoRMHCYh1PxmqFku6qJGAohqP6bB7mAU8"), /ip4/169.254.8.231/tcp/58773/p2p/12D3KooWEuruPhY3BMpqoRMHCYh1PxmqFku6qJGAohqP6bB7mAU8)])))
+[2m2025-05-15T10:59:54.568988Z[0m [32m INFO[0m Discovered peer: 12D3KooWEuruPhY3BMpqoRMHCYh1PxmqFku6qJGAohqP6bB7mAU8 at /ip4/169.254.8.231/udp/65340/quic-v1/p2p/12D3KooWEuruPhY3BMpqoRMHCYh1PxmqFku6qJGAohqP6bB7mAU8
+[2m2025-05-15T10:59:54.569189Z[0m [32m INFO[0m Discovered peer: 12D3KooWEuruPhY3BMpqoRMHCYh1PxmqFku6qJGAohqP6bB7mAU8 at /ip4/169.254.8.231/tcp/58773/p2p/12D3KooWEuruPhY3BMpqoRMHCYh1PxmqFku6qJGAohqP6bB7mAU8
+[2m2025-05-15T10:59:54.569409Z[0m [32m INFO[0m [SWARM] some
+[2m2025-05-15T10:59:54.569436Z[0m [32m INFO[0m [SWARM EVENT] NewExternalAddrOfPeer { peer_id: PeerId("12D3KooWEuruPhY3BMpqoRMHCYh1PxmqFku6qJGAohqP6bB7mAU8"), address: /ip4/169.254.8.231/udp/65340/quic-v1/p2p/12D3KooWEuruPhY3BMpqoRMHCYh1PxmqFku6qJGAohqP6bB7mAU8 }
+[2m2025-05-15T10:59:54.569596Z[0m [32m INFO[0m [EVENT] other
+[2m2025-05-15T10:59:54.569649Z[0m [32m INFO[0m [SWARM] some
+[2m2025-05-15T10:59:54.569678Z[0m [32m INFO[0m [SWARM EVENT] NewExternalAddrOfPeer { peer_id: PeerId("12D3KooWEuruPhY3BMpqoRMHCYh1PxmqFku6qJGAohqP6bB7mAU8"), address: /ip4/169.254.8.231/tcp/58773/p2p/12D3KooWEuruPhY3BMpqoRMHCYh1PxmqFku6qJGAohqP6bB7mAU8 }
+[2m2025-05-15T10:59:54.569855Z[0m [32m INFO[0m [EVENT] other
+[2m2025-05-15T10:59:54.682246Z[0m [32m INFO[0m discovered peer on address [3mpeer[0m[2m=[0m12D3KooWAU7ByfR7B5fSGRwgZeDP9jeVPBcNrRkuqf8kuMjJdzmf [3maddress[0m[2m=[0m/ip4/172.16.13.157/tcp/4001/p2p/12D3KooWAU7ByfR7B5fSGRwgZeDP9jeVPBcNrRkuqf8kuMjJdzmf
+[2m2025-05-15T10:59:54.682386Z[0m [32m INFO[0m [SWARM] some
+[2m2025-05-15T10:59:54.682404Z[0m [32m INFO[0m [SWARM EVENT] Behaviour(Mdns(Discovered([(PeerId("12D3KooWAU7ByfR7B5fSGRwgZeDP9jeVPBcNrRkuqf8kuMjJdzmf"), /ip4/172.16.13.157/tcp/4001/p2p/12D3KooWAU7ByfR7B5fSGRwgZeDP9jeVPBcNrRkuqf8kuMjJdzmf)])))
+[2m2025-05-15T10:59:54.682484Z[0m [32m INFO[0m Discovered peer: 12D3KooWAU7ByfR7B5fSGRwgZeDP9jeVPBcNrRkuqf8kuMjJdzmf at /ip4/172.16.13.157/tcp/4001/p2p/12D3KooWAU7ByfR7B5fSGRwgZeDP9jeVPBcNrRkuqf8kuMjJdzmf
+[2m2025-05-15T10:59:54.682599Z[0m [32m INFO[0m [SWARM] some
+[2m2025-05-15T10:59:54.682617Z[0m [32m INFO[0m [SWARM EVENT] NewExternalAddrOfPeer { peer_id: PeerId("12D3KooWAU7ByfR7B5fSGRwgZeDP9jeVPBcNrRkuqf8kuMjJdzmf"), address: /ip4/172.16.13.157/tcp/4001/p2p/12D3KooWAU7ByfR7B5fSGRwgZeDP9jeVPBcNrRkuqf8kuMjJdzmf }
+[2m2025-05-15T10:59:54.682697Z[0m [32m INFO[0m [EVENT] other
+[2m2025-05-15T10:59:55.287948Z[0m [32m INFO[0m discovered peer on address [3mpeer[0m[2m=[0m12D3KooWD65GfgpRxH8vvxgCFnQ3E2RZ4jNtDftRNgu8xS9MHSBn [3maddress[0m[2m=[0m/ip4/172.16.15.180/tcp/30334/p2p/12D3KooWD65GfgpRxH8vvxgCFnQ3E2RZ4jNtDftRNgu8xS9MHSBn
+[2m2025-05-15T10:59:55.288312Z[0m [32m INFO[0m [SWARM] some
+[2m2025-05-15T10:59:55.288342Z[0m [32m INFO[0m [SWARM EVENT] Behaviour(Mdns(Discovered([(PeerId("12D3KooWD65GfgpRxH8vvxgCFnQ3E2RZ4jNtDftRNgu8xS9MHSBn"), /ip4/172.16.15.180/tcp/30334/p2p/12D3KooWD65GfgpRxH8vvxgCFnQ3E2RZ4jNtDftRNgu8xS9MHSBn)])))
+[2m2025-05-15T10:59:55.289307Z[0m [32m INFO[0m Discovered peer: 12D3KooWD65GfgpRxH8vvxgCFnQ3E2RZ4jNtDftRNgu8xS9MHSBn at /ip4/172.16.15.180/tcp/30334/p2p/12D3KooWD65GfgpRxH8vvxgCFnQ3E2RZ4jNtDftRNgu8xS9MHSBn
+[2m2025-05-15T10:59:55.289890Z[0m [32m INFO[0m [SWARM] some
+[2m2025-05-15T10:59:55.289925Z[0m [32m INFO[0m [SWARM EVENT] NewExternalAddrOfPeer { peer_id: PeerId("12D3KooWD65GfgpRxH8vvxgCFnQ3E2RZ4jNtDftRNgu8xS9MHSBn"), address: /ip4/172.16.15.180/tcp/30334/p2p/12D3KooWD65GfgpRxH8vvxgCFnQ3E2RZ4jNtDftRNgu8xS9MHSBn }
+[2m2025-05-15T10:59:55.290035Z[0m [32m INFO[0m [EVENT] other
+[2m2025-05-15T11:00:04.588181Z[0m [32m INFO[0m expired peer on address [3mpeer[0m[2m=[0m12D3KooWEuruPhY3BMpqoRMHCYh1PxmqFku6qJGAohqP6bB7mAU8 [3maddress[0m[2m=[0m/ip4/169.254.8.231/udp/65340/quic-v1/p2p/12D3KooWEuruPhY3BMpqoRMHCYh1PxmqFku6qJGAohqP6bB7mAU8
+[2m2025-05-15T11:00:04.589548Z[0m [32m INFO[0m expired peer on address [3mpeer[0m[2m=[0m12D3KooWEuruPhY3BMpqoRMHCYh1PxmqFku6qJGAohqP6bB7mAU8 [3maddress[0m[2m=[0m/ip4/169.254.8.231/tcp/58773/p2p/12D3KooWEuruPhY3BMpqoRMHCYh1PxmqFku6qJGAohqP6bB7mAU8
+[2m2025-05-15T11:00:04.590068Z[0m [32m INFO[0m [SWARM] some
+[2m2025-05-15T11:00:04.590079Z[0m [32m INFO[0m [SWARM EVENT] Behaviour(Mdns(Expired([(PeerId("12D3KooWEuruPhY3BMpqoRMHCYh1PxmqFku6qJGAohqP6bB7mAU8"), /ip4/169.254.8.231/udp/65340/quic-v1/p2p/12D3KooWEuruPhY3BMpqoRMHCYh1PxmqFku6qJGAohqP6bB7mAU8), (PeerId("12D3KooWEuruPhY3BMpqoRMHCYh1PxmqFku6qJGAohqP6bB7mAU8"), /ip4/169.254.8.231/tcp/58773/p2p/12D3KooWEuruPhY3BMpqoRMHCYh1PxmqFku6qJGAohqP6bB7mAU8)])))
+[2m2025-05-15T11:00:04.590604Z[0m [32m INFO[0m [EXP]
+[2m2025-05-15T11:00:05.344823Z[0m [32m INFO[0m discovered peer on address [3mpeer[0m[2m=[0m12D3KooWEuruPhY3BMpqoRMHCYh1PxmqFku6qJGAohqP6bB7mAU8 [3maddress[0m[2m=[0m/ip4/169.254.8.231/udp/65340/quic-v1/p2p/12D3KooWEuruPhY3BMpqoRMHCYh1PxmqFku6qJGAohqP6bB7mAU8
+[2m2025-05-15T11:00:05.345104Z[0m [32m INFO[0m discovered peer on address [3mpeer[0m[2m=[0m12D3KooWEuruPhY3BMpqoRMHCYh1PxmqFku6qJGAohqP6bB7mAU8 [3maddress[0m[2m=[0m/ip4/169.254.8.231/tcp/58773/p2p/12D3KooWEuruPhY3BMpqoRMHCYh1PxmqFku6qJGAohqP6bB7mAU8
+[2m2025-05-15T11:00:05.345312Z[0m [32m INFO[0m [SWARM] some
+[2m2025-05-15T11:00:05.345347Z[0m [32m INFO[0m [SWARM EVENT] Behaviour(Mdns(Discovered([(PeerId("12D3KooWEuruPhY3BMpqoRMHCYh1PxmqFku6qJGAohqP6bB7mAU8"), /ip4/169.254.8.231/udp/65340/quic-v1/p2p/12D3KooWEuruPhY3BMpqoRMHCYh1PxmqFku6qJGAohqP6bB7mAU8), (PeerId("12D3KooWEuruPhY3BMpqoRMHCYh1PxmqFku6qJGAohqP6bB7mAU8"), /ip4/169.254.8.231/tcp/58773/p2p/12D3KooWEuruPhY3BMpqoRMHCYh1PxmqFku6qJGAohqP6bB7mAU8)])))
+[2m2025-05-15T11:00:05.345670Z[0m [32m INFO[0m Discovered peer: 12D3KooWEuruPhY3BMpqoRMHCYh1PxmqFku6qJGAohqP6bB7mAU8 at /ip4/169.254.8.231/udp/65340/quic-v1/p2p/12D3KooWEuruPhY3BMpqoRMHCYh1PxmqFku6qJGAohqP6bB7mAU8
+[2m2025-05-15T11:00:05.345868Z[0m [32m INFO[0m Discovered peer: 12D3KooWEuruPhY3BMpqoRMHCYh1PxmqFku6qJGAohqP6bB7mAU8 at /ip4/169.254.8.231/tcp/58773/p2p/12D3KooWEuruPhY3BMpqoRMHCYh1PxmqFku6qJGAohqP6bB7mAU8
+[2m2025-05-15T11:00:05.346085Z[0m [32m INFO[0m [SWARM] some
+[2m2025-05-15T11:00:05.346120Z[0m [32m INFO[0m [SWARM EVENT] NewExternalAddrOfPeer { peer_id: PeerId("12D3KooWEuruPhY3BMpqoRMHCYh1PxmqFku6qJGAohqP6bB7mAU8"), address: /ip4/169.254.8.231/udp/65340/quic-v1/p2p/12D3KooWEuruPhY3BMpqoRMHCYh1PxmqFku6qJGAohqP6bB7mAU8 }
+[2m2025-05-15T11:00:05.346298Z[0m [32m INFO[0m [EVENT] other
+[2m2025-05-15T11:00:05.346346Z[0m [32m INFO[0m [SWARM] some
+[2m2025-05-15T11:00:05.346372Z[0m [32m INFO[0m [SWARM EVENT] NewExternalAddrOfPeer { peer_id: PeerId("12D3KooWEuruPhY3BMpqoRMHCYh1PxmqFku6qJGAohqP6bB7mAU8"), address: /ip4/169.254.8.231/tcp/58773/p2p/12D3KooWEuruPhY3BMpqoRMHCYh1PxmqFku6qJGAohqP6bB7mAU8 }
+[2m2025-05-15T11:00:05.346545Z[0m [32m INFO[0m [EVENT] other
+[2m2025-05-15T11:00:10.565386Z[0m [32m INFO[0m dropping instance [3minstance[0m[2m=[0m169.254.8.231
+[2m2025-05-15T11:00:10.566306Z[0m [32m INFO[0m [SWARM] some
+[2m2025-05-15T11:00:10.566339Z[0m [32m INFO[0m [SWARM EVENT] ExpiredListenAddr { listener_id: ListenerId(1), address: /ip4/169.254.8.231/tcp/59073 }
+[2m2025-05-15T11:00:10.566383Z[0m [32m INFO[0m [EVENT] other
+[2m2025-05-15T11:00:10.566576Z[0m [32m INFO[0m [SWARM] some
+[2m2025-05-15T11:00:10.566718Z[0m [32m INFO[0m [SWARM EVENT] ExpiredListenAddr { listener_id: ListenerId(2), address: /ip4/169.254.8.231/udp/52554/quic-v1 }
+[2m2025-05-15T11:00:10.567661Z[0m [32m INFO[0m [EVENT] other
+[2m2025-05-15T11:00:18.020276Z[0m [32m INFO[0m [SWARM] some
+[2m2025-05-15T11:00:18.020333Z[0m [32m INFO[0m [SWARM EVENT] NewListenAddr { listener_id: ListenerId(1), address: /ip4/172.16.15.208/tcp/59073 }
+[2m2025-05-15T11:00:18.020515Z[0m [32m INFO[0m Listening on /ip4/172.16.15.208/tcp/59073
+[2m2025-05-15T11:00:18.020544Z[0m [32m INFO[0m Listening for RPC connections on /ip4/172.16.15.208/tcp/59073/mpc/1.0.0
+[2m2025-05-15T11:00:18.021083Z[0m [32m INFO[0m creating instance on iface address [3maddress[0m[2m=[0m172.16.15.208
+[2m2025-05-15T11:00:18.021722Z[0m [32m INFO[0m [SWARM] some
+[2m2025-05-15T11:00:18.021757Z[0m [32m INFO[0m [SWARM EVENT] NewListenAddr { listener_id: ListenerId(2), address: /ip4/172.16.15.208/udp/52554/quic-v1 }
+[2m2025-05-15T11:00:18.021852Z[0m [32m INFO[0m Listening on /ip4/172.16.15.208/udp/52554/quic-v1
+[2m2025-05-15T11:00:18.021884Z[0m [32m INFO[0m Listening for RPC connections on /ip4/172.16.15.208/udp/52554/quic-v1/mpc/1.0.0
+[2m2025-05-15T11:00:19.023977Z[0m [32m INFO[0m discovered peer on address [3mpeer[0m[2m=[0m12D3KooWEuruPhY3BMpqoRMHCYh1PxmqFku6qJGAohqP6bB7mAU8 [3maddress[0m[2m=[0m/ip4/172.16.15.208/udp/65340/quic-v1/p2p/12D3KooWEuruPhY3BMpqoRMHCYh1PxmqFku6qJGAohqP6bB7mAU8
+[2m2025-05-15T11:00:19.024118Z[0m [32m INFO[0m discovered peer on address [3mpeer[0m[2m=[0m12D3KooWEuruPhY3BMpqoRMHCYh1PxmqFku6qJGAohqP6bB7mAU8 [3maddress[0m[2m=[0m/ip4/172.16.15.208/tcp/58773/p2p/12D3KooWEuruPhY3BMpqoRMHCYh1PxmqFku6qJGAohqP6bB7mAU8
+[2m2025-05-15T11:00:19.024236Z[0m [32m INFO[0m [SWARM] some
+[2m2025-05-15T11:00:19.024252Z[0m [32m INFO[0m [SWARM EVENT] Behaviour(Mdns(Discovered([(PeerId("12D3KooWEuruPhY3BMpqoRMHCYh1PxmqFku6qJGAohqP6bB7mAU8"), /ip4/172.16.15.208/udp/65340/quic-v1/p2p/12D3KooWEuruPhY3BMpqoRMHCYh1PxmqFku6qJGAohqP6bB7mAU8), (PeerId("12D3KooWEuruPhY3BMpqoRMHCYh1PxmqFku6qJGAohqP6bB7mAU8"), /ip4/172.16.15.208/tcp/58773/p2p/12D3KooWEuruPhY3BMpqoRMHCYh1PxmqFku6qJGAohqP6bB7mAU8)])))
+[2m2025-05-15T11:00:19.024796Z[0m [32m INFO[0m Discovered peer: 12D3KooWEuruPhY3BMpqoRMHCYh1PxmqFku6qJGAohqP6bB7mAU8 at /ip4/172.16.15.208/udp/65340/quic-v1/p2p/12D3KooWEuruPhY3BMpqoRMHCYh1PxmqFku6qJGAohqP6bB7mAU8
+[2m2025-05-15T11:00:19.024871Z[0m [32m INFO[0m Discovered peer: 12D3KooWEuruPhY3BMpqoRMHCYh1PxmqFku6qJGAohqP6bB7mAU8 at /ip4/172.16.15.208/tcp/58773/p2p/12D3KooWEuruPhY3BMpqoRMHCYh1PxmqFku6qJGAohqP6bB7mAU8
+[2m2025-05-15T11:00:19.024964Z[0m [32m INFO[0m [SWARM] some
+[2m2025-05-15T11:00:19.024977Z[0m [32m INFO[0m [SWARM EVENT] NewExternalAddrOfPeer { peer_id: PeerId("12D3KooWEuruPhY3BMpqoRMHCYh1PxmqFku6qJGAohqP6bB7mAU8"), address: /ip4/172.16.15.208/udp/65340/quic-v1/p2p/12D3KooWEuruPhY3BMpqoRMHCYh1PxmqFku6qJGAohqP6bB7mAU8 }
+[2m2025-05-15T11:00:19.025044Z[0m [32m INFO[0m [EVENT] other
+[2m2025-05-15T11:00:19.025074Z[0m [32m INFO[0m [SWARM] some
+[2m2025-05-15T11:00:19.025117Z[0m [32m INFO[0m [SWARM EVENT] NewExternalAddrOfPeer { peer_id: PeerId("12D3KooWEuruPhY3BMpqoRMHCYh1PxmqFku6qJGAohqP6bB7mAU8"), address: /ip4/172.16.15.208/tcp/58773/p2p/12D3KooWEuruPhY3BMpqoRMHCYh1PxmqFku6qJGAohqP6bB7mAU8 }
+[2m2025-05-15T11:00:19.025207Z[0m [32m INFO[0m [EVENT] other
+[2m2025-05-15T11:00:19.426913Z[0m [32m INFO[0m expired peer on address [3mpeer[0m[2m=[0m12D3KooWEuruPhY3BMpqoRMHCYh1PxmqFku6qJGAohqP6bB7mAU8 [3maddress[0m[2m=[0m/ip4/169.254.8.231/udp/65340/quic-v1/p2p/12D3KooWEuruPhY3BMpqoRMHCYh1PxmqFku6qJGAohqP6bB7mAU8
+[2m2025-05-15T11:00:19.427059Z[0m [32m INFO[0m expired peer on address [3mpeer[0m[2m=[0m12D3KooWEuruPhY3BMpqoRMHCYh1PxmqFku6qJGAohqP6bB7mAU8 [3maddress[0m[2m=[0m/ip4/169.254.8.231/tcp/58773/p2p/12D3KooWEuruPhY3BMpqoRMHCYh1PxmqFku6qJGAohqP6bB7mAU8
+[2m2025-05-15T11:00:19.427133Z[0m [32m INFO[0m [SWARM] some
+[2m2025-05-15T11:00:19.427146Z[0m [32m INFO[0m [SWARM EVENT] Behaviour(Mdns(Expired([(PeerId("12D3KooWEuruPhY3BMpqoRMHCYh1PxmqFku6qJGAohqP6bB7mAU8"), /ip4/169.254.8.231/udp/65340/quic-v1/p2p/12D3KooWEuruPhY3BMpqoRMHCYh1PxmqFku6qJGAohqP6bB7mAU8), (PeerId("12D3KooWEuruPhY3BMpqoRMHCYh1PxmqFku6qJGAohqP6bB7mAU8"), /ip4/169.254.8.231/tcp/58773/p2p/12D3KooWEuruPhY3BMpqoRMHCYh1PxmqFku6qJGAohqP6bB7mAU8)])))
+[2m2025-05-15T11:00:19.427506Z[0m [32m INFO[0m [EXP]
+[2m2025-05-15T11:00:26.985147Z[0m [32m INFO[0m [SWARM] some
+[2m2025-05-15T11:00:26.985202Z[0m [32m INFO[0m [SWARM EVENT] IncomingConnection { connection_id: ConnectionId(2), local_addr: /ip4/172.16.15.208/tcp/59073, send_back_addr: /ip4/172.16.15.30/tcp/48142 }
+[2m2025-05-15T11:00:26.985236Z[0m [32m INFO[0m [EVENT] other
+[2m2025-05-15T11:00:26.999093Z[0m [32m INFO[0m [SWARM] some
+[2m2025-05-15T11:00:26.999135Z[0m [32m INFO[0m [SWARM EVENT] ConnectionEstablished { peer_id: PeerId("12D3KooWNSaEbHFuFR91ermfLPwbfVox9tousjZAs3qn7CiT6jJH"), connection_id: ConnectionId(2), endpoint: Listener { local_addr: /ip4/172.16.15.208/tcp/59073, send_back_addr: /ip4/172.16.15.30/tcp/48142 }, num_established: 1, concurrent_dial_errors: None, established_in: 13.648584ms }
+[2m2025-05-15T11:00:26.999210Z[0m [32m INFO[0m [EVENT] other
+[2m2025-05-15T11:00:27.026631Z[0m [32m INFO[0m [SWARM] some
+[2m2025-05-15T11:00:27.026691Z[0m [32m INFO[0m [SWARM EVENT] ConnectionClosed { peer_id: PeerId("12D3KooWNSaEbHFuFR91ermfLPwbfVox9tousjZAs3qn7CiT6jJH"), connection_id: ConnectionId(2), endpoint: Listener { local_addr: /ip4/172.16.15.208/tcp/59073, send_back_addr: /ip4/172.16.15.30/tcp/48142 }, num_established: 0, cause: Some(IO(Custom { kind: Other, error: Error(Right(Closed)) })) }
+[2m2025-05-15T11:00:27.026800Z[0m [32m INFO[0m [ERROR] Kind: other error RAW: None ref: [Error(Right(Closed))] Full: connection is closed
+[2m2025-05-15T11:00:29.025666Z[0m [32m INFO[0m expired peer on address [3mpeer[0m[2m=[0m12D3KooWEuruPhY3BMpqoRMHCYh1PxmqFku6qJGAohqP6bB7mAU8 [3maddress[0m[2m=[0m/ip4/172.16.15.208/udp/65340/quic-v1/p2p/12D3KooWEuruPhY3BMpqoRMHCYh1PxmqFku6qJGAohqP6bB7mAU8
+[2m2025-05-15T11:00:29.025861Z[0m [32m INFO[0m expired peer on address [3mpeer[0m[2m=[0m12D3KooWEuruPhY3BMpqoRMHCYh1PxmqFku6qJGAohqP6bB7mAU8 [3maddress[0m[2m=[0m/ip4/172.16.15.208/tcp/58773/p2p/12D3KooWEuruPhY3BMpqoRMHCYh1PxmqFku6qJGAohqP6bB7mAU8
+[2m2025-05-15T11:00:29.025935Z[0m [32m INFO[0m [SWARM] some
+[2m2025-05-15T11:00:29.025947Z[0m [32m INFO[0m [SWARM EVENT] Behaviour(Mdns(Expired([(PeerId("12D3KooWEuruPhY3BMpqoRMHCYh1PxmqFku6qJGAohqP6bB7mAU8"), /ip4/172.16.15.208/udp/65340/quic-v1/p2p/12D3KooWEuruPhY3BMpqoRMHCYh1PxmqFku6qJGAohqP6bB7mAU8), (PeerId("12D3KooWEuruPhY3BMpqoRMHCYh1PxmqFku6qJGAohqP6bB7mAU8"), /ip4/172.16.15.208/tcp/58773/p2p/12D3KooWEuruPhY3BMpqoRMHCYh1PxmqFku6qJGAohqP6bB7mAU8)])))
+[2m2025-05-15T11:00:29.026069Z[0m [32m INFO[0m [EXP]
+[2m2025-05-15T11:00:29.116352Z[0m [31mERROR[0m error sending packet on iface address No route to host (os error 65) [3maddress[0m[2m=[0m172.16.15.208
+[2m2025-05-15T11:00:33.028678Z[0m [32m INFO[0m [SWARM] some
+[2m2025-05-15T11:00:33.028793Z[0m [32m INFO[0m [SWARM EVENT] IncomingConnection { connection_id: ConnectionId(3), local_addr: /ip4/172.16.15.208/tcp/59073, send_back_addr: /ip4/172.16.15.30/tcp/48156 }
+[2m2025-05-15T11:00:33.028844Z[0m [32m INFO[0m [EVENT] other
+[2m2025-05-15T11:00:33.193256Z[0m [32m INFO[0m [SWARM] some
+[2m2025-05-15T11:00:33.193303Z[0m [32m INFO[0m [SWARM EVENT] ConnectionEstablished { peer_id: PeerId("12D3KooWNSaEbHFuFR91ermfLPwbfVox9tousjZAs3qn7CiT6jJH"), connection_id: ConnectionId(3), endpoint: Listener { local_addr: /ip4/172.16.15.208/tcp/59073, send_back_addr: /ip4/172.16.15.30/tcp/48156 }, num_established: 1, concurrent_dial_errors: None, established_in: 164.303833ms }
+[2m2025-05-15T11:00:33.193379Z[0m [32m INFO[0m [EVENT] other
+[2m2025-05-15T11:00:33.601190Z[0m [32m INFO[0m [SWARM] some
+[2m2025-05-15T11:00:33.601243Z[0m [32m INFO[0m [SWARM EVENT] ConnectionClosed { peer_id: PeerId("12D3KooWNSaEbHFuFR91ermfLPwbfVox9tousjZAs3qn7CiT6jJH"), connection_id: ConnectionId(3), endpoint: Listener { local_addr: /ip4/172.16.15.208/tcp/59073, send_back_addr: /ip4/172.16.15.30/tcp/48156 }, num_established: 0, cause: Some(IO(Custom { kind: Other, error: Error(Right(Closed)) })) }
+[2m2025-05-15T11:00:33.601333Z[0m [32m INFO[0m [ERROR] Kind: other error RAW: None ref: [Error(Right(Closed))] Full: connection is closed
+[2m2025-05-15T11:00:39.208906Z[0m [31mERROR[0m error sending packet on iface address No route to host (os error 65) [3maddress[0m[2m=[0m172.16.15.208
+[2m2025-05-15T11:00:49.301555Z[0m [31mERROR[0m error sending packet on iface address No route to host (os error 65) [3maddress[0m[2m=[0m172.16.15.208
+[2m2025-05-15T11:00:59.395126Z[0m [31mERROR[0m error sending packet on iface address No route to host (os error 65) [3maddress[0m[2m=[0m172.16.15.208
+[2m2025-05-15T11:01:09.487736Z[0m [31mERROR[0m error sending packet on iface address No route to host (os error 65) [3maddress[0m[2m=[0m172.16.15.208
+[2m2025-05-15T11:01:19.581085Z[0m [31mERROR[0m error sending packet on iface address No route to host (os error 65) [3maddress[0m[2m=[0m172.16.15.208
+[2m2025-05-15T11:01:29.674589Z[0m [31mERROR[0m error sending packet on iface address No route to host (os error 65) [3maddress[0m[2m=[0m172.16.15.208
+[2m2025-05-15T11:01:39.767451Z[0m [31mERROR[0m error sending packet on iface address No route to host (os error 65) [3maddress[0m[2m=[0m172.16.15.208
+[2m2025-05-15T11:01:49.866068Z[0m [31mERROR[0m error sending packet on iface address No route to host (os error 65) [3maddress[0m[2m=[0m172.16.15.208
+[2m2025-05-15T11:01:59.958624Z[0m [31mERROR[0m error sending packet on iface address No route to host (os error 65) [3maddress[0m[2m=[0m172.16.15.208
+[2m2025-05-15T11:02:10.052240Z[0m [31mERROR[0m error sending packet on iface address No route to host (os error 65) [3maddress[0m[2m=[0m172.16.15.208
+[2m2025-05-15T11:02:20.145017Z[0m [31mERROR[0m error sending packet on iface address No route to host (os error 65) [3maddress[0m[2m=[0m172.16.15.208
+[2m2025-05-15T11:02:30.238513Z[0m [31mERROR[0m error sending packet on iface address No route to host (os error 65) [3maddress[0m[2m=[0m172.16.15.208
+[2m2025-05-15T11:02:40.332338Z[0m [31mERROR[0m error sending packet on iface address No route to host (os error 65) [3maddress[0m[2m=[0m172.16.15.208
+[2m2025-05-15T11:02:50.425747Z[0m [31mERROR[0m error sending packet on iface address No route to host (os error 65) [3maddress[0m[2m=[0m172.16.15.208
+[2m2025-05-15T11:03:00.519234Z[0m [31mERROR[0m error sending packet on iface address No route to host (os error 65) [3maddress[0m[2m=[0m172.16.15.208
+[2m2025-05-15T11:03:10.612073Z[0m [31mERROR[0m error sending packet on iface address No route to host (os error 65) [3maddress[0m[2m=[0m172.16.15.208
+[2m2025-05-15T11:03:20.704869Z[0m [31mERROR[0m error sending packet on iface address No route to host (os error 65) [3maddress[0m[2m=[0m172.16.15.208

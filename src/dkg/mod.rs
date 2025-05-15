@@ -8,10 +8,9 @@ use rand::rngs::OsRng;
 use serde::{Deserialize, Serialize};
 use tokio::sync::RwLock;
 use tokio::sync::{mpsc};
-use tracing::info;
 
 use crate::types::dkg::MSG_TOPIC_DKG;
-use crate::types::{GossipsubMessage, KeyShare, ChannelMessage, SerializableG1Affine, SerializableScalar};
+use crate::types::{KeyShare, ChannelMessage, SerializableG1Affine, SerializableScalar};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum DKGMessage {
@@ -66,7 +65,6 @@ impl DKGNode {
     }
 
     pub async fn broadcast(&self, topic: &str, data: &[u8]) -> Result<()> {
-        info!("[dkg] bcast");
         self.message_tx.send(ChannelMessage::Broadcast {
             topic: topic.to_string(),
             data: data.to_vec(),
@@ -132,15 +130,13 @@ impl DKGNode {
         shares: Vec<KeyShare>,
         commitments: Vec<SerializableG1Affine>,
     ) -> Result<()> {
-        info!("[dkg] bcast shares");
-        let dkg_msg = DKGMessage::ShareDistribution {
+        let msg = DKGMessage::ShareDistribution {
             from: self.id.clone(),
             shares,
             commitments,
         };
-        let gossip_wrap = GossipsubMessage::DKG(dkg_msg);
         
-        let msg_bytes = serde_json::to_vec(&gossip_wrap)?;
+        let msg_bytes = serde_json::to_vec(&msg)?;
         self.broadcast(MSG_TOPIC_DKG, &msg_bytes).await?;
         Ok(())
     }
