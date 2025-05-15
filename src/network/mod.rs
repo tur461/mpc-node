@@ -372,7 +372,12 @@ impl NetworkLayer {
     }
 
     async fn handle_gossipsub_message(&mut self, message: &Message) -> Result<()> {
-        let msg: GossipsubMessage = serde_json::from_slice(&message.data)?;
+        info!("i am at handle_gossipsub_message ---------- {:?}", message);
+        let res = serde_json::from_slice::<GossipsubMessage>(&message.data); 
+        if let Err(e) = &res  {
+            info!("now I know the error ----- {:?}", e);
+        }
+        let msg = res.unwrap();
         info!("[GMSG] {:?}", msg);
         match msg {
             // this must be used by broadcast in dkg (sending end)

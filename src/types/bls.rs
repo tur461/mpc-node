@@ -2,6 +2,7 @@ use bls12_381::{G1Affine, Scalar, G1Projective};
 use group::GroupEncoding;
 use serde::{Deserialize, Serialize, Serializer, Deserializer};
 use serde::de::{self, Visitor};
+use tracing::info;
 use std::fmt;
 
 #[derive(Debug, Clone)]
@@ -12,6 +13,7 @@ impl Serialize for SerializableG1Affine {
     where
         S: Serializer,
     {
+        info!("Serailizing G1Affine");
         // Serialize G1Affine as compressed bytes
         let bytes = self.0.to_compressed();
         serializer.serialize_bytes(&bytes)
@@ -24,7 +26,7 @@ impl<'de> Visitor<'de> for G1AffineVisitor {
     type Value = SerializableG1Affine;
 
     fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-        formatter.write_str("a G1Affine point in compressed form")
+        formatter.write_str("a G1Affine point in compressed form or sequence of bytes")
     }
 
     fn visit_bytes<E>(self, v: &[u8]) -> Result<Self::Value, E>
@@ -42,6 +44,21 @@ impl<'de> Visitor<'de> for G1AffineVisitor {
             .map(SerializableG1Affine)
             .ok_or_else(|| E::custom("invalid G1Affine point"))
     }
+
+    fn visit_seq<A>(self, mut seq: A) -> Result<Self::Value, A::Error>
+    where
+        A: de::SeqAccess<'de>,
+    {
+        let mut bytes = [0u8; 48];
+        for i in 0..48 {
+            bytes[i] = seq.next_element()?
+                .ok_or_else(|| de::Error::invalid_length(i, &self))?;
+        }
+        
+        Option::from(G1Affine::from_compressed(&bytes))
+            .map(SerializableG1Affine)
+            .ok_or_else(|| de::Error::custom("invalid G1Affine point"))
+    }
 }
 
 impl<'de> Deserialize<'de> for SerializableG1Affine {
@@ -49,6 +66,7 @@ impl<'de> Deserialize<'de> for SerializableG1Affine {
     where
         D: Deserializer<'de>,
     {
+        info!("Deserailizing G1Affine");
         deserializer.deserialize_bytes(G1AffineVisitor)
     }
 }
@@ -72,7 +90,7 @@ impl<'de> Visitor<'de> for ScalarVisitor {
     type Value = SerializableScalar;
 
     fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-        formatter.write_str("a Scalar value in bytes form")
+        formatter.write_str("a Scalar value in bytes form or sequence of bytes")
     }
 
     fn visit_bytes<E>(self, v: &[u8]) -> Result<Self::Value, E>
@@ -89,6 +107,21 @@ impl<'de> Visitor<'de> for ScalarVisitor {
         Option::from(Scalar::from_bytes(&bytes))
             .map(SerializableScalar)
             .ok_or_else(|| E::custom("invalid Scalar value"))
+    }
+
+    fn visit_seq<A>(self, mut seq: A) -> Result<Self::Value, A::Error>
+    where
+        A: de::SeqAccess<'de>,
+    {
+        let mut bytes = [0u8; 32];
+        for i in 0..32 {
+            bytes[i] = seq.next_element()?
+                .ok_or_else(|| de::Error::invalid_length(i, &self))?;
+        }
+        
+        Option::from(Scalar::from_bytes(&bytes))
+            .map(SerializableScalar)
+            .ok_or_else(|| de::Error::custom("invalid Scalar value"))
     }
 }
 
