@@ -177,7 +177,8 @@ impl DKGNode {
                     to: from,
                     is_valid: true,
                 };
-                let msg_bytes = serde_json::to_vec(&validation_msg)?;
+                let gossip_wrapped = GossipsubMessage::DKG(validation_msg);
+                let msg_bytes = serde_json::to_vec(&gossip_wrapped)?;
                 self.broadcast(MSG_TOPIC_DKG, &msg_bytes).await?;
             }
         }
